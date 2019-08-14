@@ -1,0 +1,439 @@
+﻿<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="icon" href="pic/logo/logo_gray_min.png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous" /><!-- https://fontawesome.com/icons?d=gallery   ICON圖示-->
+
+    <title>店家資料維護 Join Board Game </title>
+
+    <!-- Bootstrap core CSS 連結版
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="css/bootstrap.min.css" /> <!--下載版-->
+    <link rel="stylesheet" type="text/css" href="js/ui-redmond/jquery-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-timepicker.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/font/css/open-iconic-bootstrap.min.css" />
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.ui.datepicker-zh-TW.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-timepicker.min.js"></script>
+
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            font-family: "微軟正黑體";
+            background-color: #f7f7f7;
+        }
+
+        .a-footer {
+            color: white; /*  修改超連結顏色 */
+        }
+
+        .navfont {
+            font-size: 22px; /*  修改導航欄字體 */
+        }
+
+        .joinbg {
+            font-size: 30px; /*  修改導航欄字體 */
+        }
+
+        img { /*放圖必加  圖片才會縮放*/
+            max-width: 100%;
+            height: auto;
+        }
+        /*上方背景設定*/
+        .bg-cover {
+            background-size: cover;
+            background-position: center center;
+        }
+        /*上方背景設定*/
+        .bg-attachment {
+            background-attachment: fixed; /*  固定住的 */
+        }
+
+        .image-chage {
+            position: absolute;
+        }
+
+        .starter-template {
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+
+        a:hover {
+            color: #333;
+        }
+
+        .p-ex1 {
+            padding-top: 125px;
+        }
+
+        .text-center {
+            font-family: "微軟正黑體";
+            font-weight: bold;
+        }
+
+        .container .well {
+            font-size: 20px !important;
+            font-family: "微軟正黑體" !important;
+        }
+
+        .custom-select .mb-3 {
+            line-height: 23px !important;
+        }
+
+        .plus {
+            height: 30px;
+            margin: 1px;
+        }
+
+        .form_latout {
+            width: 720px;
+            position: center;
+            margin: 0 180px;
+            font-family: "微軟正黑體";
+            font-size: 16px;
+        }
+
+        .container select {
+            line-height: 18px;
+        }
+
+        #current_user {
+            height: 50px;
+            width:50px;
+            border-radius: 25px;
+        }
+
+        img.minus {
+        }
+
+        .clock {
+            width: 15px;
+        }
+
+        .input-group-text {
+            border-top-left-radius: 0px;
+            border-bottom-left-radius: 0px;
+        }
+        #toggleButton {
+            position:relative;
+        }
+    </style>
+    <script type="text/javascript">
+        //var current_user;
+        $(function () {
+            initApp();
+            
+
+            $('.timepicker').timepicker({
+                showMeridian: false,
+                icons: {
+                        up: 'fa fa-chevron-up',
+                        down: 'fa fa-chevron-down'
+                        }});
+            
+            $("#submit").click(function () {
+                //送出表單事件
+
+
+                if (shopName == "" || tel == "" || startTime == "" || endTime == "" || gameClassType == "桌遊類型" || gameName == "桌遊名稱" || group_location == null) {
+                    alert("欄位不可為空");
+                    return;
+                }
+                
+                var rootRef = firebase.database().ref();
+                
+            });
+            
+        })
+
+        function signOut() {
+            firebase.auth().signOut();  //firebase登出
+            location.reload();
+        }
+        function initApp() {
+            var name, email, photoUrl, uid, emailVerified;
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    // User is signed in.
+                    //current_user = user;
+                    name = user.displayName;
+                    //email = user.email;
+                    uid = user.uid;
+
+                    getUserPhoto(uid);
+                    document.getElementById("uid").value = uid;
+                    document.getElementById("username").value = name;
+
+                    $("#current_user").show();
+                    $("#current_user_not_signin").hide();
+
+                    $(".dropdown-menu a:even").hide();
+                    $(".dropdown-menu a:odd").show();
+
+                    //註冊檔案點擊事件
+                    $("#moveToMyFile").click(function () {
+                        self.location.href = "member.html?memberId=" + uid;
+                    });
+                } else {
+                    // No user is signed in.
+                    self.location.href = 'signIn.html';
+                }
+            });
+
+            $("#googleMap").hide();
+            $("#boardGame").hide();
+            $("#toggleButton").hide();
+        }
+        function getUserPhoto(uid) {
+            //會員導覽列&會員資料頭像
+            var storageref = firebase.storage().ref("UserInfo/" + uid + "/profilename.jpg");
+            storageref.getDownloadURL().then(function (photoUrl) {
+                console.log(photoUrl);
+                if (photoUrl == null) {
+                    $("#current_user").attr('src', 'pic/user/user_green.png');
+                }
+                else {
+                    $("#current_user").attr('src', photoUrl);
+                }
+            }).catch(function () {
+                $("#current_user").attr('src', 'pic/user/user_green.png');
+            });
+        }
+    </script>
+</head>
+
+
+<body>
+    <!-- header區 -->
+    <!-- 導覽列 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top navfont" style="background-color: rgba(0,0,0,.7) ">
+        <img src="pic/logo/logo_gray_min.png" />
+        &nbsp;
+        <a class="navbar-brand joinbg" href="index.html">Join Board Game</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">找桌遊團</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="establish_group.html">開團囉</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="boardgame.html">桌遊介紹</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ml-auto">
+
+                <div class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0 navfont" type="submit">搜尋</button>
+                </div>
+
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="" id="current_user" /><span id="uid" hidden></span><span id="username" hidden></span>
+                        <span id="current_user_not_signin">登入</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" id="dropdown">
+                        <a class="dropdown-item" href="signIn.html">登入</a>
+                        <a class="dropdown-item" href="#" id="moveToMyFile">我的檔案</a>
+                        <a class="dropdown-item" href="regesister.html">註冊</a>
+                        <a class="dropdown-item" href="#" onclick="signOut()">登出</a>
+                        <a class="dropdown-item" href="reset_password.html">忘記密碼</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <!--桌遊團發起 內容區-->
+    <section class="py-4">
+        <div class="container ">
+            
+            <!--桌遊團發起 內容區左7  -->
+            <!-- <div class="row" id="establish_form"> -->
+            <!-- <div class="col-md-7 "> -->
+            <div class="row">
+                <div class="col-md-8 offset-md-2 " id="establish_form">
+                    <br />
+                    <h2 class="text-center">店家資料維護</h2>
+                    <div class="py-1">
+                        <label for="shopName">店名 </label>
+                        <input type="text" name="shopName" id="shopName" class="form-control" autofocus required />
+                    </div>
+                    <div class="py-1">
+                        <label for="tel">電話 </label>
+                        <input type="text" name="tel" id="tel" class="form-control" autofocus required />
+                    </div>
+                    <div class="row py-2">
+                        <div class="col">
+                            <label>開始時間 </label>
+                            <div class="input-group bootstrap-timepicker timepicker">
+                                <input id="startTime" type="text" class="form-control input-small timepicker" aria-describedby="basic-addon1">
+                                <span class="input-group-text border-left-0 " id="basic-addon1"><img src="pic/UI/clock-2x.png" class="clock" /></span>
+                            </div>
+                        </div>
+                        <div class="col">
+
+                            <label>結束時間 </label>
+                            <div class="input-group bootstrap-timepicker timepicker">
+                                <input id="endTime" type="text" class="form-control input-small timepicker">
+                                <span class="input-group-text border-left-0"><img src="pic/UI/clock-2x.png" class="clock" /></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row py-1">
+                        <div class="col">
+                            <label for="city">城市 </label>
+                            <input type="text" name="city" id="city" class="form-control" autofocus required />
+                        </div>
+                        <div class="col">
+                            <label for="strict">地區 </label>
+                            <input type="text" name="strict" id="strict" class="form-control" autofocus required />
+                        </div>
+                    </div>
+                    <div class="py-1">
+                        <label for="address">地址 </label>
+                        <input type="text" name="address" id="address" class="form-control" autofocus required />
+                    </div>
+                    <div class="row py-1">
+                        <div class="col">
+                            <label for="longitude">經度 </label>
+                            <input type="text" name="longitude" id="longitude" class="form-control" autofocus required />
+                        </div>
+                        <div class="col">
+                            <label for="latitude">緯度 </label>
+                            <input type="text" name="latitude" id="latitude" class="form-control" autofocus required />
+                        </div>
+                    </div>
+
+                    <hr />
+                    <br />
+                    <div class="col-lg-13">
+                        <button class="btn btn-info btn-lg btn-block" type="submit" id="submit">送出</button>
+                    </div>
+                    <br />
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!--footer start-->
+    <!-- Coding End -->
+    <footer class="" style="background-color:dimgray">
+        <div class="container text-white py-4 bg-attachment bg-cover ">
+            <!--             <h2 class="text-center">關於我們</h2>
+                    <p class="text-center">高雄市資X會中正四路1111號</p> -->
+            <div class="row">
+
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fab fa-adversal fa-4x mr-3" aria-hidden="true"></i>
+                        <div class="media-body">
+                            <!-- Links -->
+                            <h3 class="font-weight-bold text-uppercase mb-4">關於我們</h3>
+
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a class="a-footer" href="Disclaimer.html">版權及免責聲明</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="Privacy Policy.html">隱私權聲明</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">客服信箱</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fas fa-address-card fa-4x mr-3" aria-hidden="true"></i>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-bold text-uppercase mb-4">會員</h3>
+
+                            <ul class="list-unstyled ">
+                                <li>
+                                    <a class="a-footer" href="regesister.html">會員註冊</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">會員註冊條款</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">問題Ｑ＆Ａ</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fas fa-atlas fa-4x mr-3" aria-hidden="true"></i>
+                        <div class="text-white media-body">
+                            <h3 class="font-weight-bold text-uppercase mb-4">桌遊介紹</h3>
+
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=家庭聚會">家庭聚會</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=情境冒險">情境冒險</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=派對聯誼">派對聯誼</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=兒童親子">兒童親子</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Copyright -->
+            <div class="footer-copyright text-center pt-3">
+                <a class="a-footer" href="#" style="color:lightgray;"> © 2018 III101期專題</a>
+            </div>
+            <!-- Copyright -->
+
+        </div>
+    </footer>
+
+
+    <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyAhZsxma5bjKBNAVv-USQQ2ifc1SmaKTFE",
+            authDomain: "joinboardgame-91903.firebaseapp.com",
+            databaseURL: "https://joinboardgame-91903.firebaseio.com",
+            projectId: "joinboardgame-91903",
+            storageBucket: "joinboardgame-91903.appspot.com",
+            messagingSenderId: "400469741806"
+        };
+        firebase.initializeApp(config);
+    </script>
+</body>
+</html>

@@ -1,0 +1,329 @@
+﻿<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="utf-8" />
+    <title>黑名單</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="icon" href="pic/logo/logo_gray_min.png" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous" /><!-- https://fontawesome.com/icons?d=gallery   ICON圖示-->
+    <!-- 5星連結 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <!--5星連結  -->
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" /> <!--下載版-->
+    <script src="js/bootstrap.min.js"></script>  <!--下載版-->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.js.map"></script>
+
+    <!-- Link to your CSS file -->
+
+    <style type="text/css">
+        .checked {
+            color: orange;
+        }
+        /*五星樣式*/
+
+        html,
+        body {
+            height: 100%;
+            font-family: "微軟正黑體";
+            background-color: #f7f7f7;
+        }
+
+        .a-footer {
+            color: white; /*  修改超連結顏色 */
+        }
+
+        .navfont {
+            font-size: 22px; /*  修改導航欄字體 */
+        }
+
+        .joinbg {
+            font-size: 30px; /*  修改導航欄字體 */
+        }
+
+        .navbar2 {
+            position: fixed; /*固定導航列*/
+            top: 82px;
+            right: 0px;
+            left: 0px;
+            z-index: 10; /*讓導航列不被擋到*/
+            padding: 0px; /*  修改第二排導航欄字體 */
+            font-size: 20px;
+            font-family: "微軟正黑體";
+        }
+
+
+        .userimage { /*修改圖像大小*/
+            height: 120px;
+            width: 120px;
+        }
+
+        img { /*放圖必加  圖片才會縮放*/
+            max-width: 100%;
+            height: auto;
+        }
+        /*上方背景設定*/
+        .bg-cover {
+            background-size: cover;
+            background-position: center center;
+        }
+        /*上方背景設定*/
+        .bg-attachment {
+            background-attachment: fixed; /*  固定住的 */
+        }
+
+        .image-chage {
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- header區 -->
+    <!-- 導覽列 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top navfont" style="background-color: rgba(0,0,0,.7) ">
+        <img src="pic/logo/logo_gray_min.png" />
+        &nbsp;
+        <a class="navbar-brand joinbg" href="index.html">Join Board Game</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">找桌遊團</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="establish_group.html">開團囉</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="boardgame.html">桌遊介紹</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ml-auto">
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0 navfont" type="submit">搜尋</button>
+                </form>
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="pic/user/user_green.png" id="current_user" />
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">註冊</a>
+                        <a class="dropdown-item" href="signIn.html">登入</a>
+                        <a class="dropdown-item" href="#" onclick="signOut()">登出</a>
+                        <a class="dropdown-item" href="#">忘記密碼</a>
+                        <a class="dropdown-item" href="member.html">已登入</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <ul class="nav nav-tabs nav-justified navbar2 nav-while bg-white" >
+        <li class="nav-item">
+            <a class="nav-link " href="member.html">會員專區</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="member-set.html">會員資料維護</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="member-setgoodfriend.html">好友名單</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="member-setbadfriend.html">黑名單</a>
+        </li>
+    </ul>
+
+    <!-- 內容區-->    <!-- Start coding here -->
+    <div class="container py-5">
+        <div class="row py-5">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+
+                <!--搜尋start-->
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜尋好友</button>
+                </form>
+
+                <!--搜尋end-->
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">頭像</th>
+                            <th scope="col">會員稱號</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>
+                                <div class="userimage">
+                                    <img src="pic/user/user_256.png" alt="大頭貼">
+                                </div>
+
+                            </td>
+                            <td>資料庫拉資料</td>
+                            <td>
+                                <button type="button" class="btn btn-secondary">移除黑名單</button>
+                                <button type="button" class="btn btn-primary">加入好友</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>
+                                <div class="userimage">
+                                    <img src="pic/user/user_256.png" alt="大頭貼">
+                                </div>
+
+                            </td>
+                            <td>資料庫拉資料</td>
+                            <td>
+                                <button type="button" class="btn btn-secondary">移除黑名單</button>
+                                <button type="button" class="btn btn-primary">加入好友</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td>
+                                <div class="userimage">
+                                    <img src="pic/user/user_256.png" alt="大頭貼">
+                                </div>
+
+                            </td>
+                            <td>資料庫拉資料</td>
+                            <td>
+                                <button type="button" class="btn btn-secondary">移除黑名單</button>
+                                <button type="button" class="btn btn-primary">加入好友</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+    </div>
+
+
+    <!-- Coding End -->
+    <footer class="" style="background-color:dimgray">
+        <div class="container text-white py-4 bg-attachment bg-cover ">
+            <!--             <h2 class="text-center">關於我們</h2>
+                <p class="text-center">高雄市資X會中正四路1111號</p> -->
+            <div class="row">
+
+                <div class="col-md-4 media">
+                    <i class="fab fa-adversal fa-4x mr-3" aria-hidden="true"></i>
+                    <div class="media-body">
+                        <!-- Links -->
+                        <h3 class="font-weight-bold text-uppercase mb-4">關於我們</h3>
+
+                        <ul class="list-unstyled">
+                            <li>
+                                <a class="a-footer" href="#!">著作權聲明</a>
+                            </li>
+                            <li>
+                                <a class="a-footer" href="#!">隱私權聲明</a>
+                            </li>
+                            <li>
+                                <a class="a-footer" href="#!">客服信箱</a>
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+
+                </div>
+                <div class="col-md-4 media">
+                    <i class="fas fa-address-card fa-4x mr-3" aria-hidden="true"></i>
+
+                    <div class="media-body">
+                        <h3 class="font-weight-bold text-uppercase mb-4">會員</h3>
+
+                        <ul class="list-unstyled ">
+                            <li>
+                                <a class="a-footer" href="#!">會員註冊</a>
+                            </li>
+                            <li>
+                                <a class="a-footer" href="#!">會員註冊條款</a>
+                            </li>
+                            <li>
+                                <a class="a-footer" href="#!">註冊教學</a>
+                            </li>
+                            <li>
+                                <a class="a-footer" href="#!">問題Ｑ＆Ａ</a>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                </div>
+
+                <div class="col-md-4 media">
+                    <i class="fas fa-atlas fa-4x mr-3" aria-hidden="true"></i>
+                    <div class="text-white media-body">
+                        <h3 class="font-weight-bold text-uppercase mb-4">桌遊介紹</h3>
+
+                        <ul class="list-unstyled">
+                            <li>
+                                <a class="a-footer" href="#!">家庭聚會</a>
+                            </li>
+                            <li>
+                                <a class="a-footer" href="#!">情境冒險</a>
+                            </li>
+                            <li>
+                                <a class="a-footer" href="#!">策略經營</a>
+                            </li>
+                            <li>
+                                <a class="a-footer" href="#!">派對聯誼</a>
+                            </li>
+                            <li>
+                                <a class="a-footer" href="#!">兒童親子</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Copyright -->
+            <div class="footer-copyright text-center pt-3">
+                <a class="a-footer" href="#" style="color:lightgray;"> © 2018 III101期專題</a>
+            </div>
+            <!-- Copyright -->
+
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyAhZsxma5bjKBNAVv-USQQ2ifc1SmaKTFE",
+            authDomain: "joinboardgame-91903.firebaseapp.com",
+            databaseURL: "https://joinboardgame-91903.firebaseio.com",
+            projectId: "joinboardgame-91903",
+            storageBucket: "joinboardgame-91903.appspot.com",
+            messagingSenderId: "400469741806"
+        };
+        firebase.initializeApp(config);
+    </script>
+
+</body>
+</html>

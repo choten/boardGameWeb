@@ -1,0 +1,22 @@
+{
+  "short_name": "Join Board Game",
+  "name": "Join Board Game",
+  "icons": [
+    {
+      "src": "../pic/logo/logo_gray_192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "../pic/logo/logo_gray_512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  //"description": "喜歡玩桌遊嗎? 快來Join Board Game一起揪團吧!",
+  "start_url": "../index.html",
+  "background_color": "#FFFFFF",
+  "display": "standalone",
+  "scope": ".",
+  "theme_color": "#FFFFFF"
+}

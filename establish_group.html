@@ -1,0 +1,699 @@
+﻿<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="icon" href="pic/logo/logo_gray_min.png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous" /><!-- https://fontawesome.com/icons?d=gallery   ICON圖示-->
+
+    <title>開團囉 Join Board Game </title>
+
+    <!-- Bootstrap core CSS 連結版
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="css/bootstrap.min.css" /> <!--下載版-->
+    <link rel="stylesheet" type="text/css" href="js/ui-redmond/jquery-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-timepicker.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/font/css/open-iconic-bootstrap.min.css" />
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.ui.datepicker-zh-TW.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-timepicker.min.js"></script>
+
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            font-family: "微軟正黑體";
+            background-color: #f7f7f7;
+        }
+
+        .a-footer {
+            color: white; /*  修改超連結顏色 */
+        }
+
+        .navfont {
+            font-size: 22px; /*  修改導航欄字體 */
+        }
+
+        .joinbg {
+            font-size: 30px; /*  修改導航欄字體 */
+        }
+
+        img { /*放圖必加  圖片才會縮放*/
+            max-width: 100%;
+            height: auto;
+        }
+        /*上方背景設定*/
+        .bg-cover {
+            background-size: cover;
+            background-position: center center;
+        }
+        /*上方背景設定*/
+        .bg-attachment {
+            background-attachment: fixed; /*  固定住的 */
+        }
+
+        .image-chage {
+            position: absolute;
+        }
+
+        .starter-template {
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+
+        a:hover {
+            color: #333;
+        }
+
+        .p-ex1 {
+            padding-top: 125px;
+        }
+
+        .text-center {
+            font-family: "微軟正黑體";
+            font-weight: bold;
+        }
+
+        .container .well {
+            font-size: 20px !important;
+            font-family: "微軟正黑體" !important;
+        }
+
+        .custom-select .mb-3 {
+            line-height: 23px !important;
+        }
+
+        .plus {
+            height: 30px;
+            margin: 1px;
+        }
+
+        .form_latout {
+            width: 720px;
+            position: center;
+            margin: 0 180px;
+            font-family: "微軟正黑體";
+            font-size: 16px;
+        }
+
+        .container select {
+            line-height: 18px;
+        }
+
+        #current_user {
+            height: 50px;
+            width:50px;
+            border-radius: 25px;
+        }
+
+        img.minus {
+        }
+
+        .clock {
+            width: 15px;
+        }
+
+        .input-group-text {
+            border-top-left-radius: 0px;
+            border-bottom-left-radius: 0px;
+        }
+        #toggleButton {
+            position:relative;
+        }
+    </style>
+    <script type="text/javascript">
+        var objShops, group_location;
+        var shops;
+        //var current_user;
+        $(function () {
+            initApp();
+            
+
+            $('.timepicker').timepicker({
+                showMeridian: false,
+                icons: {
+                        up: 'fa fa-chevron-up',
+                        down: 'fa fa-chevron-down'
+                        }});
+
+            $("#date").datepicker({
+                dateFormat: 'yy/mm/dd',
+                minDate: 0
+            });
+
+            $("#submit").click(function () {
+                //送出表單事件
+                var groupName = document.getElementById("groupName").value;
+                var date = document.getElementById("date").value;
+                var startTime = date+" "+document.getElementById("startTime").value;
+                var endTime = date + " " +document.getElementById("endTime").value;
+                var member_min = $("#number_min :selected").text();
+                var member_max = $("#number_max :selected").text();
+                var gameClassType = $("#selectGameTypes :selected").text();
+                var gameName = $("#selectGameNames :selected").text();
+                var photoUrl = document.getElementById("boardGamePhotoUrl").src;
+                var uid = document.getElementById("uid").value;
+                var userName = document.getElementById("username").value;
+                var userPhotoUrl = document.getElementById("current_user").src;
+                
+                var city = $("#selectCity :selected").text();
+
+                if (group_location != null) {
+                    var shopname = group_location["title"];
+                    console.log(group_location);
+                    var shop_address = group_location["address"];
+                    var map_latitude = group_location["map_latitude"];
+                    var map_longtitude = group_location["map_longitude"];
+                    var shopTel = group_location["tel"];
+                    var opentime = group_location["opentime"];
+                    var closeTime = group_location["closetime"];
+                }
+                
+
+                if (groupName == "" || date == "" || startTime == "" || endTime == "" || gameClassType == "桌遊類型" || gameName == "桌遊名稱" || group_location == null) {
+                    alert("欄位不可為空");
+                    return;
+                }
+                console.log("groupName:" + groupName + "\nstartTime:" + startTime + "\nendTime:" + endTime
+                    + "\nmember_min:" + member_min + "\nmember_max:" + member_max
+                    + "\ngameClassType:" + gameClassType + "\ngameName:" + gameName + "\nboardGamePhotoUrl:" + boardGamePhotoUrl
+                    +"\nuserPhotoUrl:"+ userPhotoUrl + "\nuid:" + uid + "\nuserName:" + userName
+                    + "\ncity:" + city + "\nshopname:" + shopname + "\nshop_address:" + shop_address + "\nmap_latitude:" + map_latitude + "\nmap_longtitude:" + map_longtitude + "\nshopTel:" + shopTel + "\nopenTime:" + opentime + "\ncloseTime:" + closeTime);                
+
+                var groupRef = firebase.database().ref('group_simple/' + uid);
+                groupRef.set({
+                    cityName: city,
+                    gameClassType: gameClassType,
+                    gameName: gameName,
+                    groupEndTime: endTime,
+                    groupMax: member_max,
+                    groupMin: member_min,
+                    groupName: groupName,
+                    groupStartTime: startTime,
+                    photoUrl: photoUrl,
+                    shopName: shopname,
+                    userName: userName,
+                    userPhotoUrl: userPhotoUrl
+                });
+                groupRef.child("members/" + uid).set({
+                    name: userName
+                });
+                
+                firebase.database().ref('groups/' + uid).set({
+                    closetime: closeTime,
+                    map_latitude: map_latitude,
+                    map_longtitude: map_longtitude,
+                    opentime: opentime,
+                    shopAddress: shop_address,
+                    shopTel: shopTel
+                });
+
+                //在user紀錄已參加的團
+                firebase.database().ref('users/' + uid).child("joined room/" + uid).update({
+                    groupName: groupName
+                });
+
+                self.location.href = 'group_detail.html?groupId=' + uid;
+            });
+            var objGames;
+            //fetch 遊戲類型
+            firebase.database().ref('/game_Introduction/class').once('value').then(function (snapshot) {
+                objGames = snapshot.val();
+                var gameTypes = Object.keys(objGames);
+                for (var i in gameTypes) {
+                    $("#selectGameTypes").append('<option >' + gameTypes[i] + '</option>');
+                }
+            });
+            var objGameType;
+            //遊戲類型選擇完的事件
+            $("#selectGameTypes").click(function () {
+                $("#default_gametype").hide(); 
+            });
+            $("#selectGameTypes").change(function () {
+                $("#default_game").hide();
+                document.getElementById("selectGameNames").options.length = 1;
+                var selectedGameType = $("#selectGameTypes :selected").text();
+                objGameType = objGames[selectedGameType];
+                var games = Object.keys(objGameType);
+                for (var i in games) {
+                    $("#selectGameNames").append('<option >' + games[i] + '</option>');
+                }
+            });
+            //遊戲選擇完的事件
+            var objBoardGame;
+            $("#selectGameNames").change(function () {
+                var keyOfBoardGame = $("#selectGameNames :selected").text();
+                objBoardGame = objGameType[keyOfBoardGame];
+                //設置桌遊資訊
+                $("#boardGamePhotoUrl").attr("src", objBoardGame["photoUrl"]);
+                $("#boardGameInstruction").text(objBoardGame["tg_introduction"]);
+                //顯示桌遊資訊
+                //$("#googleMap").slideUp(1000);
+                $("#boardGame").slideDown(1000);
+                //$("#toggleButton").show();
+            });
+
+            //fetch city的選項
+            firebase.database().ref('/shop').once('value').then(function (snapshot) {
+                objShops = snapshot.val();
+                var citys = Object.keys(objShops);
+                for (var i in citys) {
+                    if (citys[i] == "kaohsiung")
+                        citys[i] = "高雄市";
+                    $("#selectCity").append('<option >' + citys[i] + '</option>');
+                }
+            });
+            //城市選擇完的事件
+            var objBlocks;
+            $("#selectCity").click(function () {
+                $("#default_City").hide();
+            });
+            $("#selectCity").change(function () {
+                $("#default_area").hide();
+                document.getElementById("selectBlock").options.length = 1;
+                var strCity = $("#selectCity :selected").text();
+                objBlocks = objShops[strCity];
+                var blocks = Object.keys(objBlocks);
+                for (var i in blocks) {
+                    $("#selectBlock").append('<option >' + blocks[i] + '</option>');
+                }
+            });
+            //地區選擇完事件
+            $("#selectBlock").change(function () {
+                $("#default_shop").hide();
+                document.getElementById("selectShop").options.length = 1;
+                var strBlock = $("#selectBlock :selected").text();
+                shops = objBlocks[strBlock];
+                for (var i in shops) {
+                    $("#selectShop").append('<option >' + shops[i]["title"] + "  " + shops[i]["address"] + '</option>');
+                }
+            });
+            //店家選擇完的事件
+            $("#selectShop").change(function () {
+                var index_shop = $("#selectShop :selected").index();
+                group_location = shops["id"+index_shop];
+                $("#group_location").attr("value", group_location["address"]);
+                myMap(group_location["map_latitude"], group_location["map_longitude"], group_location["title"]);
+                //顯示地圖
+                $("#googleMap").slideDown(1000).fadeTo(1000, 1);
+            });
+        })
+
+        function signOut() {
+            firebase.auth().signOut();  //firebase登出
+            location.reload();
+        }
+        function initApp() {
+            var name, email, photoUrl, uid, emailVerified;
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    // User is signed in.
+                    //current_user = user;
+                    name = user.displayName;
+                    //email = user.email;
+                    uid = user.uid;
+
+                    getUserPhoto(uid);
+                    document.getElementById("uid").value = uid;
+                    document.getElementById("username").value = name;
+
+                    $("#current_user").show();
+                    $("#current_user_not_signin").hide();
+
+                    $(".dropdown-menu a:even").hide();
+                    $(".dropdown-menu a:odd").show();
+
+                    //註冊檔案點擊事件
+                    $("#moveToMyFile").click(function () {
+                        self.location.href = "member.html?memberId=" + uid;
+                    });
+                } else {
+                    // No user is signed in.
+                    alert("開團前請先登入");
+                    self.location.href = 'signIn.html';
+                }
+            });
+
+            $("#googleMap").hide();
+            $("#boardGame").hide();
+            $("#toggleButton").hide();
+        }
+        function getUserPhoto(uid) {
+            //會員導覽列&會員資料頭像
+            var storageref = firebase.storage().ref("UserInfo/" + uid + "/profilename.jpg");
+            storageref.getDownloadURL().then(function (photoUrl) {
+                console.log(photoUrl);
+                if (photoUrl == null) {
+                    $("#current_user").attr('src', 'pic/user/user_green.png');
+                }
+                else {
+                    $("#current_user").attr('src', photoUrl);
+                }
+            }).catch(function () {
+                $("#current_user").attr('src', 'pic/user/user_green.png');
+            });
+        }
+    </script>
+</head>
+
+
+<body>
+    <!-- header區 -->
+    <!-- 導覽列 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top navfont" style="background-color: rgba(0,0,0,.7) ">
+        <img src="pic/logo/logo_gray_min.png" />
+        &nbsp;
+        <a class="navbar-brand joinbg" href="index.html">Join Board Game</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">找桌遊團</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="establish_group.html">開團囉</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="boardgame.html">桌遊介紹</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="" id="current_user" /><span id="uid" hidden></span><span id="username" hidden></span>
+                        <span id="current_user_not_signin">登入</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" id="dropdown">
+                        <a class="dropdown-item" href="signIn.html">登入</a>
+                        <a class="dropdown-item" href="#" id="moveToMyFile">我的檔案</a>
+                        <a class="dropdown-item" href="regesister.html">註冊</a>
+                        <a class="dropdown-item" href="#" onclick="signOut()">登出</a>
+                        <a class="dropdown-item" href="reset_password.html">忘記密碼</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <!--桌遊團發起 內容區-->
+    <section class="py-4">
+        <div class="container ">
+            
+            <!--桌遊團發起 內容區左7  -->
+            <!-- <div class="row" id="establish_form"> -->
+            <!-- <div class="col-md-7 "> -->
+            <div class="row">
+                <div class="col-md-7 " id="establish_form">
+                    <br />
+                    <h2 class="text-center">開團囉</h2>
+                    <div class="py-1">
+                        <label for="groupName">團名 </label>
+                        <input type="text" name="groupName" id="groupName" class="form-control" autofocus required />
+                    </div>
+                    <div class="py-1">
+                        <label for="selectCity">地點 </label>
+                        <input type="text" class="form-control" id="group_location" disabled placeholder="請從選項中選取" />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                            <select name="selectCity" id="selectCity" class="custom-select mb-3">
+                                <option id="default_City">城市</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                            <select name="selectBlock" id="selectBlock" class="custom-select mb-3">
+                                <option id="default_area">地區</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                            <select name="selectShop" id="selectShop" class="custom-select mb-3" >
+                                <option id="default_shop">店名</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row py-2">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                            <p>
+                                <label for="date">活動日期 </label>
+                                <input type="text" class="form-control" id="date" />
+                            </p>
+                        </div>
+                        <div class="col-lg-6">
+
+
+                            <label>開始時間 </label>
+                            <div class="input-group bootstrap-timepicker timepicker">
+                                <input id="startTime" type="text" class="form-control input-small timepicker" aria-describedby="basic-addon1">
+                                <span class="input-group-text border-left-0 " id="basic-addon1"><img src="pic/UI/clock-2x.png" class="clock" /></span>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-6">
+
+                            <label>結束時間 </label>
+                            <div class="input-group bootstrap-timepicker timepicker">
+                                <input id="endTime" type="text" class="form-control input-small timepicker">
+                                <span class="input-group-text border-left-0"><img src="pic/UI/clock-2x.png" class="clock" /></span>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="row py-1">
+                        <div class="col-lg-6">
+                            <label>最小人數</label>
+                            <select name="number_min" id="number_min" class="custom-select">
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-6">
+                            <label>最大人數</label>
+                            <select name="number_max" id="number_max" class="custom-select mb-3">
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="gameArea">
+                        <div>
+                            <label>想玩的桌遊 </label>
+                        </div>
+                        <div class="row py-1">
+                            <!--<div class="col-sm">
+                                <input type="text" class="form-control" id="gameName" />
+                            </div>
+                            <div class="col-sm-4" id="gameName">
+                                <img src="pic/UI/Plus.png" name="plus" id="plus" class="plus" />
+                            </div>-->
+                            <div class="col-lg-4">
+                                <select name="selectGameTypes" id="selectGameTypes" class="custom-select mb-3">
+                                    <option id="default_gametype">桌遊類型</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-8">
+                                <select name="selectGameNames" id="selectGameNames" class="custom-select mb-3">
+                                    <option id="default_game">桌遊名稱</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="col-lg-13">
+                        <button class="btn btn-info btn-lg btn-block" type="submit" id="submit">送出</button>
+                    </div>
+                    <br />
+
+                </div>
+
+                <!--桌遊團發起 內容區左7 end -->
+                <!--桌遊團發起 地圖區右5 star -->
+                <div class="col-md-5 pt-5">
+                    <!--------------------------地圖start----------------------->
+                    <div class="row pt-5">
+                        <!--<h4>桌遊地圖</h4>-->
+
+                        <div id="googleMap" style="width:100%;height:400px;"></div>
+
+                        <script>
+                            function myMap(map_latitude, map_longitude, title) {
+                                var mapProp = {
+                                    center: new google.maps.LatLng(map_latitude, map_longitude),
+                                    zoom: 18
+                                };    //調顯示距離
+                                var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+                                var marker = new google.maps.Marker({
+                                    position: new google.maps.LatLng(map_latitude, map_longitude),
+                                    map: map,
+                                    animation: google.maps.Animation.BOUNCE,
+                                    icon: "pic/logo/mapicon.png"
+                                });
+				                var infowindow = new google.maps.InfoWindow({
+                                    //content: "高雄龐奇桌遊餐廳"          //取變數帶資料
+                                    content: title         //取變數帶資料
+                                    });
+                                    infowindow.open(map,marker);
+                            }
+
+
+
+                        </script>
+
+                        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0PmstR14WJp8gcR81cc51pK4sEJEEzYs&callback=myMap"></script>
+
+                    </div>
+                    <!--------------------------地圖end----------------------->
+                    <!--桌遊列表-->
+                    <div id="boardGame" style="width:100%;height:300px;" class="">
+                        <hr />
+                        <h5>桌遊簡介</h5>
+                        <img src="" id="boardGamePhotoUrl" style="width:128px" class="rounded"/><br />
+                        <div id="boardGameInstruction"></div>
+                    </div>
+                    <!--<div id="toggleButton">
+                        <button id="togglePic" class="btn btn-secondary">地圖/桌遊 切換</button>
+                    </div>-->
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!--footer start-->
+    <!-- Coding End -->
+    <footer class="" style="background-color:dimgray">
+        <div class="container text-white py-4 bg-attachment bg-cover ">
+            <div class="row justify-content-center">
+
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fab fa-adversal fa-4x mr-3" aria-hidden="true"></i>
+                        <div class="media-body">
+                            <!-- Links -->
+                            <h3 class="font-weight-bold text-uppercase mb-4">關於我們</h3>
+
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a class="a-footer" href="Disclaimer.html">版權及免責聲明</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="Privacy Policy.html">隱私權聲明</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">客服信箱</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fas fa-address-card fa-4x mr-3" aria-hidden="true"></i>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-bold text-uppercase mb-4">會員</h3>
+
+                            <ul class="list-unstyled ">
+                                <li>
+                                    <a class="a-footer" href="regesister.html">會員註冊</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">會員註冊條款</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">問題Ｑ＆Ａ</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fas fa-atlas fa-4x mr-3" aria-hidden="true"></i>
+                        <div class="text-white media-body">
+                            <h3 class="font-weight-bold text-uppercase mb-4">桌遊介紹</h3>
+
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=家庭聚會">家庭聚會</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=情境冒險">情境冒險</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=派對聯誼">派對聯誼</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=兒童親子">兒童親子</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="footer-copyright text-center pt-3">
+                <span style="color:lightgray;">© 2018 III101期專題</span>
+            </div>
+            <!-- Copyright -->
+
+        </div>
+    </footer>
+
+
+    <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyAhZsxma5bjKBNAVv-USQQ2ifc1SmaKTFE",
+            authDomain: "joinboardgame-91903.firebaseapp.com",
+            databaseURL: "https://joinboardgame-91903.firebaseio.com",
+            projectId: "joinboardgame-91903",
+            storageBucket: "joinboardgame-91903.appspot.com",
+            messagingSenderId: "400469741806"
+        };
+        firebase.initializeApp(config);
+    </script>
+</body>
+</html>

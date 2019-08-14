@@ -1,0 +1,335 @@
+﻿<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+    <meta charset="utf-8" />
+    <title>會員資料維護</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="icon" href="pic/logo/logo_gray_min.png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous"><!-- https://fontawesome.com/icons?d=gallery   ICON圖示-->
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css"> <!--下載版-->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Link to your CSS file -->
+    <style type="text/css">
+        html,
+        body {
+            height: 100%;
+            font-family: "微軟正黑體";
+            background: #fff url(pic/background/bg.png) repeat top left;
+        }
+
+        .a-footer {
+            color: white; /*  修改超連結顏色 */
+        }
+
+        .navfont {
+            font-size: 22px; /*  修改導航欄字體 */
+        }
+
+        .joinbg {
+            font-size: 30px; /*  修改導航欄字體 */
+        }
+
+        .userimage { /*修改圖像大小*/
+            height: 120px;
+            width: 120px;
+        }
+
+        img { /*放圖必加  圖片才會縮放*/
+            max-width: 100%;
+            height: auto;
+        }
+        /*上方背景設定*/
+        .bg-cover {
+            background-size: cover;
+            background-position: center center;
+        }
+        /*上方背景設定*/
+        .bg-attachment {
+            background-attachment: fixed; /*  固定住的 */
+        }
+
+        #current_user {
+            height: 50px;
+            width: 50px;
+            border-radius: 25px;
+        }
+
+        #navbar2 {
+            position: fixed;
+            top: 80px;
+            right: 0px;
+            left: 0px;
+            z-index: 10;
+        }
+        #joinedGroupsBlock {
+            display:none;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            var memberId = getParameterByName("memberId");
+            initApp(memberId);
+
+            //撈member資料
+            firebase.database().ref('/users/' + memberId).once('value').then(function (snapshot) {
+                if (!snapshot.exist) {
+                    $("#userName").text(snapshot.val().user);
+                    document.getElementById("photoUrl").src = snapshot.val().photoUrl;
+                    if (snapshot.val().introduction == null || snapshot.val().introduction == "" || snapshot.val().introduction == " ") {
+                        $("#comment").css("color", "gray");
+                        $("#comment").html("這個人很懶，沒有留下任何自我介紹 &#x1f605");
+                    }
+                    else {
+                        var comment = snapshot.val().introduction.replace(/\n/g, '<br />');
+                        $("#comment").html(comment);
+                    }
+                    
+                }
+            });
+        });
+        function getParameterByName(name, url) {
+            //假設一開始name=>hobby[0]
+            if (!url) url = window.location.href; //如果url==null 則url指派為目前頁面的網址
+            name = name.replace(/[\[\]]/g, '\\$&');
+            //此時name=> hobby\[0\]
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url); //搜尋url符合RegExp’s pattern的字串片段
+            //console.log(results);
+            //results[0]-> "&hobby[0]=sing" (results[0]對應符合pattern的字串)
+            //results[1]-> "=sing"          (results[1]對應pattern中第一個群組的字串)
+            //results[2]-> "sing"           (results[2]對應pattern中第二個群組的字串)
+            if (!results) return null;  //當results==null-->return null
+            if (!results[2]) return ''; //當results[2]==undefined/空字串-->return ''
+            return decodeURIComponent(results[2].replace(/\+/g, ' ')); //請求參數值當中之+字元換成空白, 然後進行百分比解碼
+        }
+        function getUserPhoto(uid) {
+            //會員導覽列&會員資料頭像
+            var storageref = firebase.storage().ref("UserInfo/" + uid + "/profilename.jpg");
+            storageref.getDownloadURL().then(function (photoUrl) {
+                if (photoUrl == null) {
+                    $("#current_user").attr('src', 'pic/user/user_green.png');
+                    $("#user_picture").attr('src', 'pic/user/user_256.png');
+                }
+                else {
+                    $("#current_user").attr('src', photoUrl);
+                    $("#user_picture").attr('src', photoUrl);
+                }
+            }).catch(function () {
+                $("#current_user").attr('src', 'pic/user/user_green.png');
+            });
+        }
+        function initApp(memberId) {
+            var name, email, photoUrl, uid, emailVerified;
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    uid = user.uid;
+                    getUserPhoto(uid)
+                    // User is signed in.
+                    $("#current_user").show();
+                    $("#current_user_not_signin").hide();
+
+                    $(".dropdown-menu a:even").hide();
+                    $(".dropdown-menu a:odd").show();
+
+                    //註冊檔案點擊事件
+                    $("#moveToMyFile").click(function () {
+                        self.location.href = "member.html?memberId=" + uid;
+                    });
+
+                    if (memberId == uid) {
+                        $("#member-set").css("display", "inline");
+                        //$("#joinedGroupsBlock").css("display", "inline");
+                    }
+                } else {
+                    // No user is signed in.
+                    //會員導覽列
+                    $("#current_user").hide();
+                    $("#current_user_not_signin").show();
+
+                    $(".dropdown-menu a:odd").hide();
+                    $(".dropdown-menu a:even").show();
+
+                }
+            });
+            
+        }
+        function signOut() {
+            firebase.auth().signOut();  //firebase登出
+            location.reload();
+        }
+    </script>
+</head>
+
+<body>
+
+    <!-- header區 -->
+    <!-- 導覽列 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top navfont" style="background-color: rgba(0,0,0,.7) ">
+        <img src="pic/logo/logo_gray_min.png" />
+        &nbsp;
+        <a class="navbar-brand joinbg" href="index.html">Join Board Game</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">找桌遊團</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="establish_group.html">開團囉</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="boardgame.html">桌遊介紹</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ml-auto">                
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="" id="current_user" />
+                        <span id="current_user_not_signin">登入</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="signIn.html">登入</a>
+                        <a class="dropdown-item" href="#" id="moveToMyFile">我的檔案</a>
+                        <a class="dropdown-item" href="regesister.html">註冊</a>
+                        <a class="dropdown-item" href="#" onclick="signOut()">登出</a>
+                        <a class="dropdown-item" href="reset_password.html">忘記密碼</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- 內容區-->    <!-- Start coding here -->
+    <!-- 伺服器端 start -->
+    <div class="container py-5">
+        <div class="row ">
+            <div class="col-md-8 offset-md-2  shadow p-5 bg-white">
+                <div class="media mt-1">
+                    <img src="pic/user/user_256.png" class="border round p-2 mr-3" style="width:256px;" id="photoUrl"/>
+                    <div class="media-body">
+                        <div class="row mb-3 ml-1 align-items-center">
+                            <div class=""><h2 class="font-weight-bold" id="userName">會員名稱</h2></div><div><a href="member-set.html" class="ml-2" id="member-set" style="display:none;">[編輯會員資料]</a></div>
+                        </div>
+                        
+                        <!--<p><img src="pic/UI/email.png" style="height:25px;"/>電子信箱: <span></span></p>-->
+                        <p id="comment"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 offset-md-2  shadow p-5 mt-5 bg-white" id="joinedGroupsBlock">
+                <h3 class="font-weight-bold">已參加的桌遊團</h3>
+                <hr />
+                <div >
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Coding End -->
+    <footer class="" style="background-color:dimgray">
+        <div class="container text-white py-4 bg-attachment bg-cover ">
+            <div class="row justify-content-center">
+
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fab fa-adversal fa-4x mr-3" aria-hidden="true"></i>
+                        <div class="media-body">
+                            <!-- Links -->
+                            <h3 class="font-weight-bold text-uppercase mb-4">關於我們</h3>
+
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a class="a-footer" href="Disclaimer.html">版權及免責聲明</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="Privacy Policy.html">隱私權聲明</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">客服信箱</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fas fa-address-card fa-4x mr-3" aria-hidden="true"></i>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-bold text-uppercase mb-4">會員</h3>
+
+                            <ul class="list-unstyled ">
+                                <li>
+                                    <a class="a-footer" href="regesister.html">會員註冊</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">會員註冊條款</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">問題Ｑ＆Ａ</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fas fa-atlas fa-4x mr-3" aria-hidden="true"></i>
+                        <div class="text-white media-body">
+                            <h3 class="font-weight-bold text-uppercase mb-4">桌遊介紹</h3>
+
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=家庭聚會">家庭聚會</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=情境冒險">情境冒險</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=派對聯誼">派對聯誼</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=兒童親子">兒童親子</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="footer-copyright text-center pt-3">
+                <span style="color:lightgray;">© 2018 III101期專題</span>
+            </div>
+            <!-- Copyright -->
+
+        </div>
+    </footer>
+    <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyAhZsxma5bjKBNAVv-USQQ2ifc1SmaKTFE",
+            authDomain: "joinboardgame-91903.firebaseapp.com",
+            databaseURL: "https://joinboardgame-91903.firebaseio.com",
+            projectId: "joinboardgame-91903",
+            storageBucket: "joinboardgame-91903.appspot.com",
+            messagingSenderId: "400469741806"
+        };
+        firebase.initializeApp(config);
+    </script>
+
+</body>
+</html>

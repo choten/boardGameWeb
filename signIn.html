@@ -1,0 +1,241 @@
+﻿
+<!doctype html>
+<html lang="zh-tw">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="pic/logo/logo_gray_min.png">
+    <title>登入Join Board Game揪桌遊</title>
+
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <style type="text/css">
+        html,
+        body {
+            height: 100%;
+            font-family: "微軟正黑體";
+        }
+
+        body {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #f5f5f5;
+        }
+        .form-signin {
+            width: 100%;
+            max-width: 330px;
+            padding: 15px;
+            margin: auto;
+        }
+        .form-signin .checkbox {
+            font-weight: 400;
+        }
+        .form-signin .form-control {
+            position: relative;
+            box-sizing: border-box;
+            height: auto;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .form-signin .form-control:focus {
+            z-index: 2;
+        }
+        .form-signin input[type="email"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        .form-signin input[type="password"] {
+            margin-bottom: 10px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+        #button_facebook, #button_google {
+            width: inherit;
+        }
+
+        #forgetPwd {
+            float: left;
+        }
+
+        #register {
+            float: right;
+        }
+
+        .checkbox {
+            margin: 0px 10px !important;
+        }
+    </style>
+    <script>
+        function changeStyle() {
+            $("#button_facebook").attr('src', 'pic/UI/button_facebook_hover.png');
+        }
+        function resetStyle() {
+            $("#button_facebook").attr('src','pic/UI/button_facebook.png');
+        }
+        function changeStyle_google() {
+            $("#button_google").attr('src', 'pic/UI/button_google_hover.png');
+        }
+        function resetStyle_google() {
+            $("#button_google").attr('src', 'pic/UI/button_google.png');
+        }
+        function facebook_login() {
+            $("#button_facebook").attr('src','pic/UI/button_facebook_press.png');
+
+            var provider = new firebase.auth.FacebookAuthProvider();
+
+            firebase.auth().signInWithPopup(provider).then(function (result) {
+                // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+                var token = result.credential.accessToken;
+                // The signed-in user info.
+                var user = result.user;
+
+            }).catch(function (error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // The email of the user's account used.
+                if (errorMessage) {
+                    alert('errorMessage' + errorMessage);
+                }
+                var email = error.email;
+                // The firebase.auth.AuthCredential type that was used.
+                var credential = error.credential;
+            });
+
+        }
+        function google_login() {
+            var provider = new firebase.auth.GoogleAuthProvider();
+
+            firebase.auth().signInWithPopup(provider).then(function (result) {
+                // This gives you a Google Access Token. You can use it to access the Google API.
+                var token = result.credential.accessToken;
+                // The signed-in user info.
+                var user = result.user;
+
+            }).catch(function (error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // The email of the user's account used.
+                var email = error.email;
+                // The firebase.auth.AuthCredential type that was used.
+                var credential = error.credential;
+            });
+        }
+
+        function toggleSignIn() {
+            if (firebase.auth().currentUser) {
+                // [START signout]
+                firebase.auth().signOut();
+                // [END signout]
+            } else {
+                var email = document.getElementById('Email').value;
+                var password = document.getElementById('Password').value;
+                if (email.length < 4) {
+                    alert('請輸入電子信箱');
+                    return;
+                }
+                if (password.length < 6) {
+                    alert('密碼長度不得小於6');
+                    return;
+                }
+                // Sign in with email and pass.
+                // [START authwithemail]
+                firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
+                    // Handle Errors here.
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    // [START_EXCLUDE]
+                    if (errorCode === 'auth/wrong-password') {
+                        alert('密碼錯誤');
+                    } else {
+                        alert(errorMessage);
+                    }
+                    console.log(error);
+                    // [END_EXCLUDE]
+                });
+                // [END authwithemail]
+            }
+        }
+        function initApp() {
+            // Listening for auth state changes.
+            // [START authstatelistener]
+            firebase.auth().onAuthStateChanged(function (user) {
+
+                if (user) {
+                    //self.location.href = 'https://iii101-3.iii.wpj.tw/';
+                    self.location.href = 'index.html';
+                } else {
+                    // User is signed out.
+                }
+            });
+        }
+        window.onload = function () {
+            initApp();
+        };
+    </script>
+</head>
+
+<body class="text-center">
+    
+    <div class="form-signin">
+        <img class="mb-4" src="pic/logo/logo_gif_gray.gif" alt="" width="144" height="144">
+        <label for="Email" class="sr-only">電子信箱</label>
+        <input type="email" id="Email" class="form-control" placeholder="電子信箱" required autofocus>
+        <label for="Password" class="sr-only">密碼</label>
+        <input type="password" id="Password" class="form-control" placeholder="密碼" required>
+        <div class="row justify-content-md-center">
+            <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" value="remember-me"> 保持登入狀態
+                </label>
+            </div>
+        </div>
+
+        <button class="btn btn-lg btn-secondary btn-block" type="submit" onclick="toggleSignIn()">登 入</button>
+        <hr />
+
+        <img src="pic/UI/button_facebook.png" class="button_facebook" id="button_facebook"
+             onclick="facebook_login()" onmouseover="changeStyle()" onmouseout="resetStyle()">
+        <img src="pic/UI/button_google.png" class="button_google mt-3" id="button_google" 
+             onclick="google_login()" onmouseover="changeStyle_google()" onmouseout="resetStyle_google()">
+        <br />
+        <br />
+
+        <div class="row justify-content-md-center">
+
+            <div>
+                <a href="reset_password.html">忘記密碼</a>
+            </div>
+            <div>
+                <label>&nbsp;&nbsp;|&nbsp;&nbsp;</label>
+            </div>
+            <div>
+                <a href="regesister.html">建立帳戶</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyAhZsxma5bjKBNAVv-USQQ2ifc1SmaKTFE",
+            authDomain: "joinboardgame-91903.firebaseapp.com",
+            databaseURL: "https://joinboardgame-91903.firebaseio.com",
+            projectId: "joinboardgame-91903",
+            storageBucket: "joinboardgame-91903.appspot.com",
+            messagingSenderId: "400469741806"
+        };
+        firebase.initializeApp(config);
+    </script>
+</body>
+</html>

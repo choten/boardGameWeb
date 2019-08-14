@@ -1,0 +1,920 @@
+﻿<!DOCTYPE html>
+<html lang="zh-hant">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="pic/logo/logo_gray_min.png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous"><!-- https://fontawesome.com/icons?d=gallery   ICON圖示-->
+
+    <title>Join Board Game 揪桌遊</title>
+    <!--Manifest JSON file-->
+    <link rel="manifest" href="manifest/manifest.json">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css"> <!--下載版-->
+    <link rel="stylesheet" type="text/css" href="js/ui-redmond/jquery-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-timepicker.min.css" />
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.ui.datepicker-zh-TW.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+
+    <style type="text/css">
+        body {
+            padding-top: 0rem;
+            height: 100%;
+            font-family: "微軟正黑體";
+            background-color: #f7f7f7;
+        }
+
+        div {
+            word-break: break-all !important;
+        }
+
+        .a-footer {
+            color: white; /*  修改超連結顏色 */
+        }
+
+        .navfont {
+            font-size: 22px; /*  修改導航欄字體 */
+        }
+
+        .joinbg {
+            font-size: 30px; /*  修改導航欄字體 */
+        }
+        img { /*放圖必加  圖片才會縮放*/
+            max-width: 100%;
+            height: auto;
+        }
+        .starter-template {
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+
+        a:hover {
+            color: #333;
+        }
+
+        .bg-cover {
+            background-size: cover;
+            background-position: center center;
+        }
+
+        .bg-attachment {
+            background-attachment: fixed; /*  固定住的 */
+        }
+
+        .p-ex1 {
+            padding-top: 125px;
+        }
+
+        #list .group_info {
+            font-weight: bold;
+            font-size: 15px;
+            float: left;
+            padding: 0px 10px;
+            margin: 0px;
+        }
+
+        #list {
+            font-weight: bold;
+        }
+
+        .userPhotoUrl, .img_user {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+        }
+
+        .img_boardGame {
+            width: 80px;
+            border-radius: 10px;
+        }
+
+        .group {
+            cursor: pointer;
+        }
+
+        .group2:hover {
+            background-color: #ade8f4 !important;
+        }
+
+        .groupName {
+            font-family: "微軟正黑體";
+            font-size: 20px;
+            color: #06F;
+            /*line-height: 30px;*/
+        }
+
+        .text-center {
+            font-family: "微軟正黑體";
+            font-weight: bold;
+        }
+
+        .smallName {
+            font-family: "微軟正黑體";
+            font-weight: bold;
+            font-size: 13px;
+            color: #666;
+            padding: 0px 16px 0px 0px;
+            line-height: 13px;
+            white-space: nowrap;
+        }
+
+        * tyle > .fb_reset {
+            background: none;
+            border: 0;
+            border-spacing: 0;
+            color: #000;
+            cursor: auto;
+            direction: ltr;
+            font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+            font-size: 12px;
+            font-style: normal;
+            font-variant: normal;
+            font-weight: normal;
+            letter-spacing: normal;
+            line-height: 1;
+            margin: 0;
+            overflow: visible;
+            padding: 0;
+            text-align: left;
+            text-decoration: none;
+            text-indent: 0;
+            text-shadow: none;
+            text-transform: none;
+            visibility: visible;
+            white-space: normal;
+            word-spacing: normal;
+        }
+
+        #current_user {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+        }
+
+        #datepicker {
+            width: inherit !important;
+        }
+
+        .ui-datepicker {
+            width: inherit;
+        }
+
+        a {
+            text-decoration: none !important;
+        }
+
+        ul,
+        ul ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .menu {
+            width: auto;
+            height: auto;
+            -webkit-box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
+            -moz-box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
+            box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
+        }
+
+            .menu > li > a {
+                background-color: #616975;
+                background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(114, 122, 134)),to(rgb(80, 88, 100)));
+                background-image: -webkit-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+                background-image: -moz-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+                background-image: -o-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+                /*background-image: -ms-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));*/
+                background-image: linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+                filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#727a86', EndColorStr='#505864');
+                border-bottom: 1px solid #33373d;
+                -webkit-box-shadow: inset 0px 1px 0px 0px #878e98;
+                -moz-box-shadow: inset 0px 1px 0px 0px #878e98;
+                box-shadow: inset 0px 1px 0px 0px #878e98;
+                width: 100%;
+                height: 2.75em;
+                line-height: 2.75em;
+                text-indent: 2.75em;
+                display: block;
+                position: relative;
+                font-weight: 600;
+                color: #fff;
+                text-shadow: 0px 1px 0px rgba(0,0,0,.5);
+            }
+
+        #wrapper {
+            /*width:280px;*/
+            margin: 20px auto !important;
+            font-size: 0.9375em;
+        }
+
+        .menu ul li:not(#datefilter) a {
+            background: #fff;
+            border-bottom: 1px solid #efeff0;
+            width: 100%;
+            height: 2.75em;
+            line-height: 2.75em;
+            text-indent: 2.75em;
+            display: block;
+            position: relative;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 0.923em;
+            font-weight: 400;
+            color: #878d95;
+        }
+
+        .menu > li > a:hover,
+        .menu > li > a.active {
+            background-color: #35afe3;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(69, 199, 235)),to(rgb(38, 152, 219)));
+            background-image: -webkit-linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));
+            background-image: -moz-linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));
+            background-image: -o-linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));
+            /*background-image: -ms-linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));*/
+            background-image: linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));
+            filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#45c7eb', EndColorStr='#2698db');
+            border-bottom: 1px solid #103c56;
+            -webkit-box-shadow: inset 0px 1px 0px 0px #6ad2ef;
+            -moz-box-shadow: inset 0px 1px 0px 0px #6ad2ef;
+            box-shadow: inset 0px 1px 0px 0px #6ad2ef;
+        }
+
+        .menu > li > a.active {
+            border-bottom: 1px solid #1a638f;
+        }
+
+        .menu > li > ul li:not(#datefilter) a:before {
+            content: '▶';
+            font-size: 8px;
+            color: #bcbcbf;
+            position: absolute;
+            width: 1em;
+            height: 1em;
+            top: 0;
+            left: -2.7em;
+        }
+
+        .menu > li > ul li:not(#datefilter):hover a,
+        .menu > li > ul li:not(#datefilter):hover a span,
+        .menu > li > ul li:not(#datefilter):hover a:before {
+            color: #32373D;
+        }
+
+        .menu > li > a:before {
+            content: '';
+            background-image: url(pic/UI/chess.png);
+            background-repeat: no-repeat;
+            font-size: 36px;
+            height: 1em;
+            width: 1em;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            margin: -.5em 0 0 0;
+        }
+
+        .item1 > a:before {
+            background-image: url(pic/UI/magnifying.png) !important;
+        }
+
+        .item2 > a:before {
+            background-image: url(pic/UI/chess.png) !important;
+        }
+
+        .item3 > a:before {
+            background-image: url(pic/UI/location.png) !important;
+        }
+
+        .item4 > a:before {
+            background-image: url(pic/UI/people.png) !important;
+        }
+
+        .item5 > a:before {
+            background-image: url(pic/UI/calendar.png) !important;
+            height: 1em !important;
+            width: 1em !important;
+        }
+
+        .item6 > a:before {
+            background-image: url(pic/UI/check_Filter.png) !important;
+        }
+
+        hr.style-one {
+            margin: 10px;
+            border: 0;
+            height: 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        #descriptionOfSearch {
+            color: gray;
+        }
+
+        #txtGroupName {
+            border-radius: 0px !important;
+        }
+
+        #list a {
+            color: black;
+        }
+
+        .dateTime {
+            white-space: nowrap;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            initApp();
+
+            var groupRef = firebase.database().ref('group_simple');
+
+            //增加group
+            groupRef.on('child_added', function (data) {
+                console.log("child_added:\n" + data.val());
+
+                //處理結束時間
+                var date = data.val().groupStartTime.split(" ")[0];
+                var StartTime = data.val().groupStartTime.split(" ")[1];
+                var EndTime = data.val().groupEndTime.split(" ")[1];
+
+                if (data.val().members != null || typeof data.val().members != "undefined") {
+                    prependGroup(data.key, data.val().groupName, data.val().photoUrl, data.val().gameName, data.val().gameClassType, data.val().cityName, data.val().shopName, date, StartTime, EndTime, data.val().userName, data.val().userPhotoUrl, data.val().groupMin, data.val().groupMax, data.val().members);
+                    var numberOfMember = Object.keys(data.val().members).length;
+                    if (numberOfMember >= data.val().groupMax)
+                        $("#" + data.key).hide();
+                }
+
+            });
+            //修改group
+            groupRef.on('child_changed', function (data) {
+                //判斷是否滿人
+                var numberOfMember = Object.keys(data.val().members).length;
+                if (numberOfMember >= data.val().groupMax) {
+                    $("#" + data.key).slideUp(600);
+                    //$("#" + data.key).remove();
+                    return;
+                }
+                //if ($("#" + data.key)==null)
+                console.log($("#" + data.key + " .groupName").text());
+                //修改桌遊團資料
+                $("#" + data.key + " .city").text(data.val().cityName);
+                $("#" + data.key + " .shopName").text(data.val().shopName);
+
+                $("#" + data.key + " .img_boardGame").attr("src", data.val().photoUrl);
+
+                $("#" + data.key + " .gameType").text(data.val().gameClassType);
+                $("#" + data.key + " .gameName").text(data.val().gameName);
+                $("#" + data.key + " .max").text(data.val().groupMax);
+                $("#" + data.key + " .min").text(data.val().groupMin);
+
+                $("#" + data.key + " .groupName").text(data.val().groupName);
+                var date = data.val().groupStartTime.split(" ")[0];
+                var StartTime = data.val().groupStartTime.split(" ")[1];
+                var EndTime = data.val().groupEndTime.split(" ")[1];
+                $("#" + data.key + " .date").text(date);
+                $("#" + data.key + " .groupStartTime").text(StartTime);
+                $("#" + data.key + " .groupEndTime").text(EndTime);
+
+                $("#" + data.key + " .userName").text(data.val().userName);
+                $("#" + data.key + " .userPhotoUrl").attr("src", data.val().userPhotoUrl);
+                //seatOfMembers
+                $("#" + data.key + " .seatOfMembers .members").remove();
+                var seat = appendSeat(data.val().members, data.val().groupMin, data.val().groupMax, data.val().userName);
+                $("#" + data.key + " .seatOfMembers").append(seat);
+
+                if ($("#" + data.key).is(":hidden"))
+                    $("#" + data.key).slideDown(600);
+            });
+            //刪除group
+            groupRef.on('child_removed', function (data) {
+                console.log("child_removed\n" + data.key);
+                $("#" + data.key).slideUp(600);
+                //$("#" + data.key).remove();
+            });
+
+            //datePicker
+            $("#datepicker").datepicker({
+                dateFormat: 'yy/mm/dd',
+                onSelect: function (dateText, inst) {
+                    var dateAsString = dateText; //the first parameter of this function
+                    //var dateAsObject = $(this).datepicker('getDate'); //the getDate method
+                    $(".group").each(function () {
+                        var date = $(".date", this).text();
+                        if (date == dateAsString) {
+                            $(this).slideDown(600);
+                        }
+                        else {
+                            $(this).slideUp(600);
+                        }
+                    });
+                }
+            })
+
+            //menu
+            var menu_ul = $('.menu > li > ul'),
+                menu_a = $('.menu > li > a');
+            menu_ul.hide();
+            menu_a.click(function (e) {
+                e.preventDefault();
+                if (!$(this).hasClass('active')) {
+                    menu_a.removeClass('active');
+                    menu_ul.filter(':visible').slideUp('normal');
+                    $(this).addClass('active').next().stop(true, true).slideDown('normal');
+                } else {
+                    $(this).removeClass('active');
+                    $(this).next().stop(true, true).slideUp('normal');
+                }
+            });
+            $("#titleOfSearch").click(function () {
+                $("#txtGroupName").focus();
+            });
+            //selectGameType
+            $("#wrapper .selectGameType").click(function () {
+                var selectedGameType = $(this).text();
+                filterGroup('gameType', selectedGameType);
+                return false;
+            });
+            //selectNumberOfPeople
+            $("#wrapper .selectNumberOfPeople").click(function () {
+                var selectNumberOfPeople = $(this).text();
+                filterGroup('numberOfPeople', selectNumberOfPeople);
+                return false;
+            });
+            //selectCity
+            $("#wrapper .selectCity").click(function () {
+                var selectCity = $(this).text();
+                filterGroup('city', selectCity);
+                return false;
+            });
+            //pickDate
+            $("#pickDate").click(function () {
+                $("#datepicker").focus();
+            });
+            //showJoinedGroup
+            $("#showJoinedGroup").click(function () {
+                var uid = document.getElementById("uid").value;
+                firebase.database().ref('users/' + uid + '/joined room').once('value').then(function (snapshot) {
+                    var arrayKeyJoinedRooms = Object.keys(snapshot.val());
+
+                    $("#list .group").each(function () {
+                        var groupId = $(this).attr("id");
+                        var IsJoined = checkIsJoined(groupId, arrayKeyJoinedRooms);
+                        if (IsJoined) {
+                            $(this).slideDown(600);
+                        }
+                        else {
+                            $(this).slideUp(600);
+                        }
+                    });
+                });
+                return false;
+            });
+        });
+        function checkIsJoined(groupId, arrayKeyJoinedRooms) {
+            console.log("groupId: " + groupId);
+            for (var i = 0; i < arrayKeyJoinedRooms.length; i++) {
+
+                if (groupId == arrayKeyJoinedRooms[i])
+                    return true;
+            }
+            return false;
+        }
+        function moveToGroup(myObj) {
+            var groupId = myObj.id;
+            self.location.href = 'group_detail.html?groupId=' + groupId;
+        }
+        function prependGroup(key, groupName, GamePhotoUrl, gameName, gameClassType, cityName, shopName, date, groupStartTime, groupEndTime, userName, userPhotoUrl, groupMin, groupMax, members) {
+            var seat = appendSeat(members, groupMin, groupMax, key);
+
+            var div_group = $('<div class="group" id="' + key + '" onclick="moveToGroup(this)"><a href="#"><div class="group2 shadow border rounded bg-white">' +
+                '<div class="row mt-2 ml-1 mr-1" >' +
+                '<div class="col-md-4 media"><img src="' + GamePhotoUrl + '" class="img_boardGame mr-2" />' +
+                '<div class="media-body"><span class="groupName">' + groupName + '</span></div></div>' +
+                '<div class="col-md-3">桌遊 : <span class="gameName">' + gameName + '</span><br />類型 : <span class="gameType">' + gameClassType + '</span><span class="min" hidden>' + groupMin + '</span><span class="max" hidden>' + groupMax + '</span></div>' +
+                '<div class="col-md-5">地點 : <span class="shopName">' + shopName + '</span><span class="city" hidden>' + cityName + '</span> <br />' +
+                '活動時間 : <span class="date">' + date + '</span>' + ' &nbsp;' + '<span class="dateTime"><span class="groupStartTime">' + groupStartTime + '</span> - <span class="groupEndTime">' + groupEndTime + '</span></span></div></div >' +
+                '<hr class="style-one"/>' +
+                '<div class="seatOfMembers user row mb-2 mx-1">' +
+                '<div class="col-sm-2"><img src="' + userPhotoUrl + '" class="userPhotoUrl mb-1" /> <span class="userName smallName">' + userName + ' </span></div>' +
+                seat +
+                '</div></div ></a><br/></div>');
+            div_group.hide();
+            $("#list").prepend(div_group);
+            div_group.slideDown(600);
+        }
+        function appendSeat(members, groupMin, groupMax, groupId) {
+            console.log(members);
+            var memberNames = new Array();
+            var memberPhotos = new Array();
+            //拆解members
+            $.each(members, function (index, value) {
+                //console.log(index);
+                if (index != groupId) {
+                    memberNames.push(value.name);
+                    if (typeof value.userPhotoUrl != "undefined")
+                        memberPhotos.push(value.userPhotoUrl);
+                    else
+                        memberPhotos.push("pic/user/user_green.png");
+                }
+            })
+            //console.log(memberNames);
+            //console.log(groupMin);
+            //console.log(groupMax);
+
+            //設置座位
+            var requirededSeat = "";
+            for (var i = 0; i < groupMin - 1; i++) {
+                if (i < memberNames.length) {
+                    requirededSeat += '<div class="members col-sm-2"><img src="' + memberPhotos[i] + '" class="img_user" /><span class="memberName smallName">' + memberNames[i] + ' </span></div>';
+                }
+                else {
+                    requirededSeat += '<div class="members col-sm-2"><img src="' + 'pic/user/user_green_question.png' + '" class="img_user" /><span class="memberName smallName">' + '(徵求位)' + ' </span></div>';
+                }
+            }
+            var freeSeat = "";
+            for (var i = 0; i < groupMax - groupMin; i++) {
+                //console.log();
+                if (i < memberNames.length - (groupMin-1))
+                    freeSeat += '<div class="members col-sm-2"><img src="' + memberPhotos[(groupMin - 1) + i] + '" class="img_user" /><span class="memberName smallName">' + memberNames[(groupMin - 1) + i] + ' </span></div>';
+                else
+                freeSeat += '<div class="members col-sm-2"><img src="' + 'pic/user/user_green_light.png' + '" class="img_user" /><span class="memberName smallName">' + '(自由位)' + ' </span></div>';
+            }
+            return requirededSeat + freeSeat;
+        }
+        function signOut() {
+            firebase.auth().signOut();  //firebase登出
+            location.reload();
+        }
+        function initApp() {
+            var name, email, photoUrl, uid, emailVerified;
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    // User is signed in.
+                    name = user.displayName;
+                    email = user.email;
+                    uid = user.uid;
+                    getUserPhoto(uid);
+                    emailVerified = user.emailVerified;
+
+                    document.getElementById("uid").value = uid;
+
+                    $("#current_user").show();
+                    $("#current_user_not_signin").hide();
+
+                    $("#dropdown-menu a:even").hide();
+                    $("#dropdown-menu a:odd").show();
+
+                    //註冊檔案點擊事件
+                    $("#moveToMyFile").click(function () {
+                        self.location.href = "member.html?memberId=" + uid;
+                    });
+                } else {
+                    // No user is signed in.
+
+                    $("#current_user").hide();
+                    $("#current_user_not_signin").show();
+                    $("#dropdown-menu a:odd").hide();
+                    $("#dropdown-menu a:even").show();
+                }
+            });
+        }
+        function getUserPhoto(uid) {
+            //會員導覽列&會員資料頭像
+            var storageref = firebase.storage().ref("UserInfo/" + uid + "/profilename.jpg");
+            storageref.getDownloadURL().then(function (photoUrl) {
+                console.log(photoUrl);
+                if (photoUrl == null) {
+                    $("#current_user").attr('src', 'pic/user/user_green.png');
+                }
+                else {
+                    $("#current_user").attr('src', photoUrl);
+                }
+            }).catch(function () {
+                $("#current_user").attr('src', 'pic/user/user_green.png');
+            });
+        }
+        function filterGroup(type, value) {
+            switch (type) {
+                case 'gameType': //遊戲類型篩選
+                    $("#list .group").each(function () {
+                        var gameType = $(".gameType", this).text();
+                        if (gameType == value) {
+                            $(this).slideDown(600);
+                        }
+                        else {
+                            $(this).slideUp(600);
+                        }
+                    });
+                    break;
+                case 'numberOfPeople': //人數篩選
+                    if (value == '9人以上') {
+                        $("#list .group").each(function () {
+                            var min = parseInt($(".min", this).text());
+
+                            if (min >= 9) {
+                                $(this).slideDown(600);
+                            }
+                            else {
+                                $(this).slideUp(600);
+                            }
+                        });
+                    }
+                    else {
+                        $("#list .group").each(function () {
+                            var min = parseInt($(".min", this).text());
+                            var max = parseInt($(".max", this).text());
+                            var numberOfPeople = parseInt(value);
+
+                            if (value - min >= 0 && max - value >= 0) {
+                                $(this).slideDown(600);
+                            }
+                            else {
+                                $(this).slideUp(600);
+                            }
+                        });
+                    }
+                    break;
+                case 'city':
+                    $("#list .group").each(function () {
+                        var city = $(".city", this).text();
+                        if (city == value) {
+                            $(this).slideDown(600);
+                        }
+                        else {
+                            $(this).slideUp(600);
+                        }
+                    });
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        function searchGroupName() {
+            var input_groupName = document.getElementById("txtGroupName").value;
+            if (input_groupName != "") {
+                $("#list .group").each(function () {
+                    var groupName = $(".groupName", this).text();
+
+                    if (groupName.match(input_groupName) != null) {
+                        $(this).slideDown(600);
+                    }
+                    else {
+                        $(this).slideUp(600);
+                    }
+                });
+            }
+            else {
+                $("#list .group").each(function () {
+                    $(this).slideDown();
+                });
+            }
+        }
+    </script>
+</head>
+
+    
+<body>
+    <!-- header 區 -->
+    <!-- 導覽列 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top navfont" style="background-color: rgba(0,0,0,.7) ">
+        <img src="pic/logo/logo_gray_min.png" />
+        &nbsp;
+        <a class="navbar-brand joinbg" href="index.html">Join Board Game</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">找桌遊團</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="establish_group.html">開團囉</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="boardgame.html">桌遊介紹</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ml-auto">
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="" id="current_user" /><span id="uid" hidden></span><span id="username" hidden></span>
+                        <span id="current_user_not_signin">登入</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" id="dropdown-menu">
+                        <a class="dropdown-item" href="signIn.html">登入</a>
+                        <a class="dropdown-item" href="#" id="moveToMyFile">我的檔案</a>
+                        <a class="dropdown-item" href="regesister.html">註冊</a>
+                        <a class="dropdown-item" href="#" onclick="signOut()">登出</a>
+                        <a class="dropdown-item" href="reset_password.html">忘記密碼</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="container-fluid">
+        <div class="row py-5 justify-content-md-center">
+            <!--<div class="col-sm-1"></div>-->
+            <div class="mt-5 pt-5 px-3 col-md-2 " id="left_nav">
+                <div id="wrapper">
+                    <ul class="menu">
+                        <li class="item1">
+                            <a href="#" id="titleOfSearch">搜索 </a>
+                            <ul>
+                                <li class="subitem1">
+                                    <div class="input-group my-2">
+                                        <input type="text" id="txtGroupName" class="form-control" placeholder="請輸入團名" aria-label="Recipient's username" aria-describedby="button-addon2" onkeypress="searchGroupName()">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="searchGroupName()">搜尋</button>
+                                        </div>
+                                        <span id="descriptionOfSearch">若輸入欄位為空，則顯示全部資料</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="item2">
+                            <a href="#">依遊戲類型篩選 </a>
+                            <ul>
+                                <li class="subitem1"><a href="#" class="selectGameType" id="GameType_children">兒童親子</a></li>
+                                <li class="subitem2"><a href="#" class="selectGameType" id="GameType_family">家庭聚會</a></li>
+                                <li class="subitem3"><a href="#" class="selectGameType" id="GameType_party">情境冒險</a></li>
+                                <li class="subitem4"><a href="#" class="selectGameType" id="GameType_party">派對聯誼</a></li>
+                            </ul>
+                        </li>
+                        <li class="item3">
+                            <a href="#">依地區篩選 </a>
+                            <ul>
+                                <li class="subitem1"><a href="#" class="selectCity">台北市</a></li>
+                                <li class="subitem2"><a href="#" class="selectCity">台中市</a></li>
+                                <li class="subitem3"><a href="#" class="selectCity">高雄市</a></li>
+                            </ul>
+                        </li>
+                        <li class="item4">
+                            <a href="#">依人數篩選</a>
+                            <ul>
+                                <li class="subitem1"><a href="#" class="selectNumberOfPeople">2</a></li>
+                                <li class="subitem2"><a href="#" class="selectNumberOfPeople">3</a></li>
+                                <li class="subitem3"><a href="#" class="selectNumberOfPeople">4</a></li>
+                                <li class="subitem3"><a href="#" class="selectNumberOfPeople">5</a></li>
+                                <li class="subitem3"><a href="#" class="selectNumberOfPeople">6</a></li>
+                                <li class="subitem3"><a href="#" class="selectNumberOfPeople">7</a></li>
+                                <li class="subitem3"><a href="#" class="selectNumberOfPeople">8</a></li>
+                                <li class="subitem3"><a href="#" class="selectNumberOfPeople">9人以上</a></li>
+                            </ul>
+                        </li>
+                        <li class="item5">
+                            <a href="#" id="pickDate">依日期篩選 </a>
+                            <ul>
+                                <li id="datefilter">
+                                    <div id="datepicker"><span id="date"></span></div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="item6"><a href="#" id="showJoinedGroup">已參加的桌遊團</a> </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="py-5 col-md-6 mx-2">
+                <h2 class="text-center">桌遊團列表</h2>
+                <br />
+                <div id="list">
+                    <!--<div class="group"><a href="#">
+                        <div class="group2 shadow border rounded bg-white">
+                            <div class="row mt-2 ml-1 mr-1">
+                                <div class="col-md-4 media">
+                                    <img src="pic/boardGame/betrayal_at_house_on_the_hill.jpg" title="桌遊圖片" class="img_boardGame mr-2" />
+                                    <div class="media-body"><span class="groupName">在R'lyeh的宅邸中，長眠的Cthulhu候汝入夢</span></div>
+                                </div>
+
+                                <div class="col-md-3">桌遊 : <span>山中小屋</span><br />類型 : <span class="gameType">派對聯誼</span><span class="min" hidden>3</span><span class="max" hidden>5</span></div>
+                                <div class="col-md-5">
+                                    地點 : <span>FUN 桌遊</span><span class="city" hidden>台中市</span> <br />
+                                    活動時間 : <span class="date">2018/06/25</span> <span>13:00</span> - <span>17:00</span><br />
+                                </div>
+                            </div>
+                            <hr class="style-one" />
+                            <div class="user row mb-2 ml-1 mr-1">
+                                <div class="col-sm-2"><img src="pic/user/user_example.png" class="img_user" /> <span class="userName">邱騰右 </span></div>
+                                <div class="col-sm-2"><img src="pic/user/user_green_question.png" class="img_user" /><span class="userName">(徵求位) </span></div>
+                                <div class="col-sm-2"><img src="pic/user/user_green_question.png" class="img_user" /><span class="userName">(徵求位) </span></div>
+                                <div class="col-sm-2"><img src="pic/user/user_green_light.png" class="img_user" /><span class="userName">(自由位) </span></div>
+                                <div class="col-sm-2"><img src="pic/user/user_green_light.png" class="img_user" /><span class="userName">(自由位) </span></div>
+                            </div>
+                        </div></a><br />
+                    </div>-->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--footer start-->
+    <!-- Coding End -->
+    <footer class="" style="background-color:dimgray">
+        <div class="container text-white py-4 bg-attachment bg-cover ">
+            <div class="row justify-content-center" >
+
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fab fa-adversal fa-4x mr-3" aria-hidden="true"></i>
+                        <div class="media-body">
+                            <!-- Links -->
+                            <h3 class="font-weight-bold text-uppercase mb-4">關於我們</h3>
+
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a class="a-footer" href="Disclaimer.html">版權及免責聲明</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="Privacy Policy.html">隱私權聲明</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">客服信箱</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fas fa-address-card fa-4x mr-3" aria-hidden="true"></i>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-bold text-uppercase mb-4">會員</h3>
+
+                            <ul class="list-unstyled ">
+                                <li>
+                                    <a class="a-footer" href="regesister.html">會員註冊</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">會員註冊條款</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">問題Ｑ＆Ａ</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fas fa-atlas fa-4x mr-3" aria-hidden="true"></i>
+                        <div class="text-white media-body">
+                            <h3 class="font-weight-bold text-uppercase mb-4">桌遊介紹</h3>
+
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=家庭聚會">家庭聚會</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=情境冒險">情境冒險</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=派對聯誼">派對聯誼</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=兒童親子">兒童親子</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="footer-copyright text-center pt-3">
+                <span style="color:lightgray;">© 2018 III101期專題</span>
+            </div>
+            <!-- Copyright -->
+
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyAhZsxma5bjKBNAVv-USQQ2ifc1SmaKTFE",
+            authDomain: "joinboardgame-91903.firebaseapp.com",
+            databaseURL: "https://joinboardgame-91903.firebaseio.com",
+            projectId: "joinboardgame-91903",
+            storageBucket: "joinboardgame-91903.appspot.com",
+            messagingSenderId: "400469741806"
+        };
+        firebase.initializeApp(config);
+    </script>
+</body>
+</html>

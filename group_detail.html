@@ -1,0 +1,1502 @@
+﻿<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="pic/logo/logo_gray_min.png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous" /><!-- https://fontawesome.com/icons?d=gallery   ICON圖示-->
+
+    <title id="title"> Join Board Game </title>
+
+    <!-- Bootstrap core CSS 連結版
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="css/bootstrap.min.css" /> <!--下載版-->
+    <link rel="stylesheet" type="text/css" href="js/ui-redmond/jquery-ui.min.css" />
+    <!--<link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css" />-->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-timepicker.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/jquery.lsxemojipicker.css" />
+    <!--<link rel="stylesheet" type="text/css" href="css/emojionearea.min.css" />-->
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.ui.datepicker-zh-TW.js"></script>
+    <script src="js/bootstrap-timepicker.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0PmstR14WJp8gcR81cc51pK4sEJEEzYs&callback=myMap"></script>
+    <script src="js/jquery.lsxemojipicker.js"></script>
+    <script src="https://twemoji.maxcdn.com/2/twemoji.min.js"></script>
+    <!--<script src="js/emojionearea.min.js"></script>-->
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            font-family: "微軟正黑體";
+            background: #fff url(pic/background/bg.png) repeat top left;
+        }
+
+        a {
+            text-decoration: none !important;
+        }
+
+        ul,
+        ul ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .a-footer {
+            color: white; /*  修改超連結顏色 */
+        }
+
+        .navfont {
+            font-size: 22px; /*  修改導航欄字體 */
+        }
+
+        .joinbg {
+            font-size: 30px; /*  修改導航欄字體 */
+        }
+
+        img { /*放圖必加  圖片才會縮放*/
+            max-width: 100%;
+            height: auto;
+        }
+        /*上方背景設定*/
+        .bg-cover {
+            background-size: cover;
+            background-position: center center;
+        }
+        /*上方背景設定*/
+        .bg-attachment {
+            background-attachment: fixed; /*  固定住的 */
+        }
+
+
+        a:hover {
+            color: #333;
+        }
+
+        .p-ex1 {
+            padding-top: 125px;
+        }
+
+        .text-center {
+            font-weight: bold;
+        }
+
+        #current_user {
+            height: 50px;
+            width: 50px;
+            border-radius: 25px;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #topBlock .subTitle:hover {
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
+
+        #topBlock .gray {
+            font-size: 15px;
+            color: dimgray;
+        }
+
+        #showMap {
+            float: right;
+            color: cornflowerblue;
+        }
+
+            #showMap:hover {
+                float: right;
+                text-decoration: underline;
+            }
+
+        #groupId {
+            font-size: 12px;
+        }
+
+        #userPhotoUrl {
+            height: 40px;
+            width: 40px;
+            border-radius: 20px;
+        }
+
+        hr.style1 {
+            border-top: 1px solid #8c8b8b;
+        }
+
+        .ui-dialog {
+            z-index: 1100 !important;
+        }
+        /*chat*/
+        #chat {
+            display: none;
+        }
+
+        .chat li {
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px dotted #B3A9A9;
+        }
+
+            .chat li .chat-body p {
+                margin: 0;
+                /*color: #777777;*/
+                font-size: 14px;
+            }
+
+        .panel-body {
+            overflow-y: scroll;
+            height: 300px;
+        }
+
+        /*聊天室*/
+        .popup-head {
+            background-color: #fff;
+            clear: both;
+            color: #7b7b7b;
+            display: inline-table;
+            font-size: 21px;
+            padding: 7px 10px;
+            width: 100%;
+        }
+
+        .panel-footer textarea {
+            border-bottom: 1px solid #b2b2b2 !important;
+            height: 34px ;
+            margin: 7px;
+            padding: 5px !important;
+            border: medium none;
+            width: 95% !important;
+        }
+
+        .chat-header-button {
+            background: transparent none repeat scroll 0 0;
+            border: 1px solid #636364;
+            border-radius: 50%;
+            font-size: 14px;
+            height: 30px;
+            width: 30px;
+        }
+
+            .chat-header-button:hover {
+                background-color: #efefef !important;
+                cursor: pointer;
+            }
+
+        abbr.timestamp {
+            background: #3f9684 none repeat scroll 0 0;
+            color: #fff;
+            padding: 0 11px;
+        }
+
+        .chat-box-single-line {
+            border-bottom: 1px solid #a4c6b5;
+            height: 12px;
+            margin: 7px 0 20px;
+            position: relative;
+            text-align: center;
+        }
+
+        .direct-chat-messages {
+            height: auto;
+        }
+
+        .direct-chat-text {
+            background: #dfece7 none repeat scroll 0 0;
+            border: 1px solid #dfece7;
+            border-radius: 2px;
+            color: #1f2121;
+            /*width:250px;*/
+        }
+
+        .direct-chat-timestamp {
+            color: #fff;
+            opacity: 0.6;
+            float: right;
+        }
+
+        .direct-chat-name {
+            font-size: 15px;
+            font-weight: 600;
+            margin: 0 0 0 49px !important;
+            color: #fff;
+            opacity: 0.9;
+        }
+
+        .direct-chat-info {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 0;
+        }
+
+        .big-round {
+            margin: -9px 0 0 !important;
+        }
+
+        .direct-chat-img {
+            border: 1px solid #fff;
+            background: #3f9684 none repeat scroll 0 0;
+            border-radius: 50%;
+            float: left;
+            height: 40px;
+            margin: -21px 0 0;
+            width: 40px;
+        }
+
+        .direct-chat-reply-name {
+            color: #fff;
+            font-size: 15px;
+            margin: 0 0 0 10px;
+            opacity: 0.9;
+        }
+
+        .direct-chat-img-reply-small {
+            border: 1px solid #fff;
+            border-radius: 50%;
+            float: left;
+            height: 20px;
+            margin: 0 8px;
+            width: 20px;
+            background: #3f9684;
+        }
+
+        .direct-chat-msg {
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .doted-border::after {
+            background: transparent none repeat scroll 0 0 !important;
+            border-right: 2px dotted #fff !important;
+            bottom: 0;
+            content: "";
+            left: 17px;
+            margin: 0;
+            position: absolute;
+            top: 0;
+            width: 2px;
+            display: inline;
+            z-index: -2;
+        }
+
+        .direct-chat-msg::after {
+            background: #fff none repeat scroll 0 0;
+            border-right: medium none;
+            bottom: 0;
+            content: "";
+            left: 17px;
+            margin: 0;
+            position: absolute;
+            top: 0;
+            width: 2px;
+            display: inline;
+            z-index: -2;
+        }
+
+        .direct-chat-text::after, .direct-chat-text::before {
+            border-color: transparent #dfece7 transparent transparent;
+        }
+
+        .direct-chat-text::after, .direct-chat-text::before { /*對話框箭頭*/
+            -moz-border-bottom-colors: none;
+            -moz-border-left-colors: none;
+            -moz-border-right-colors: none;
+            -moz-border-top-colors: none;
+            border-color: transparent #d2d6de transparent transparent;
+            border-image: none;
+            border-style: solid;
+            border-width: medium;
+            content: " ";
+            height: 0;
+            pointer-events: none;
+            position: absolute;
+            right: 100%;
+            top: 15px;
+            width: 0;
+        }
+
+        .direct-chat-text::after {
+            border-width: 5px;
+            margin-top: -5px;
+        }
+
+        .direct-chat-text {
+            background: #dfece7 none repeat scroll 0 0;
+            border: 1px solid #dfece7;
+            border-radius: 2px;
+            color: #1f2121;
+        }
+
+        .direct-chat-text {
+            background: #dfece7 none repeat scroll 0 0;
+            border: 1px solid #d2d6de;
+            border-radius: 5px;
+            color: #444;
+            margin: 5px 0 0 50px;
+            padding: 5px 10px;
+            position: relative;
+        }
+
+        #accordion, #btnEmoji:hover {
+            cursor: pointer;
+        }
+        #memberBlock .img_user:hover {
+            cursor: pointer;
+        }
+        .memberName {
+            color: #3f9684;
+            font-weight:bold;
+        }
+        #chat div {
+            word-break: break-all;
+        }
+        #members .btnRemoveMember {
+            display:none;
+        }
+    </style>
+    <script type="text/javascript">
+        var isAlreadyJoin = false;
+        var group_location = {};
+        var groupId;
+        var members = {};
+        $(function () {
+            $("#googleMap").hide();
+            initApp();
+
+            //讀取groupId
+            groupId = getParameterByName('groupId');
+            //撈桌遊團資料&聊天室資料
+            fetchGroupInfo(groupId, memberEvent);
+            fetchChatMsg();
+            
+            //地圖開關
+            $("#address").click(function () {
+                if ($(this).hasClass("closeMap")) { //關起來
+                    $("#showMap").text("顯示地圖");
+                    $("#googleMap").slideUp(1000);
+                    $(this).removeClass("closeMap");
+                }
+                else {//打開來
+                    $("#showMap").text("隱藏地圖");
+                    $("#googleMap").slideDown(1000);
+                    $(this).addClass("closeMap");
+                }
+            });
+
+            //UI
+            $('[data-toggle="tooltip"]').tooltip();
+            $("#edidGroupInfo").dialog({
+                minWidth: 600,
+                modal: true,
+                show: "slideDown",
+                autoOpen: false,
+                position: {
+                    my: "left top",
+                    at: "left bottom",
+                    of: "#gamePic"
+                },
+                buttons: {
+                    "確認修改": function () {
+                        //修改資料...
+                        //var group_location = generateOptionsOfCityAndShop();
+                        //console.log(Object.keys(group_location).length);
+                        writeNewPost(group_location);
+                        $(this).dialog("close");
+                    },
+                    "取消": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('.timepicker').timepicker({
+                showMeridian: false,
+                icons: {
+                    up: 'fa fa-chevron-up',
+                    down: 'fa fa-chevron-down'
+                }
+            });
+            $("#editGroupDate").datepicker({
+                dateFormat: 'yy/mm/dd',
+                minDate: 0
+            });
+            //聲音元件
+            $('<audio id="chatAudio"><source src="sound/notify.ogg" type="audio/ogg">'+
+                '< source src = "sound/notify.mp3" type = "audio/mpeg" > <source src="sound/notify.wav" type="audio/wav">'+
+                '</audio>').appendTo('body');
+            //編輯按鈕事件
+            $("#btnEdit").click(function () {
+                $("#edidGroupInfo").dialog("open");
+                fillInTheForm();
+                generateOptionsOfGameAndGameclass();
+                var test = generateOptionsOfCityAndShop();
+            });
+            //Emoji按鈕事件
+            //$("#status_message").emojioneArea();
+            $('#btnEmoji').lsxEmojiPicker({
+                closeOnSelect: true,
+                twemoji: true,
+                onSelect: function (emoji) {
+                    document.getElementById("status_message").value += $("#status_message").html(emoji["value"]).text();
+                    document.getElementById("status_message").focus();
+                }
+            });
+            //關閉聊天室
+            $("#removeChat").click(function (event) {
+                event.stopPropagation();
+                $("#chat").css("display", "none");
+                document.getElementById("status_message").value = "";
+                if (!$("#chat").hasClass("chatclose")) {
+                    $("#accordion").trigger("click");
+                    $("#chat").addClass("chatclose");
+                }
+            });
+
+            //開啟聊天室
+            $("#btnStartChat").click(function () {
+                //$("#chatContent").animate({ scrollTop: $(this).outerHeight(true) }, 1000);//卷軸拉至最底，因為會從資料庫append資料，故卷軸會自動被拉到底下
+                //console.log($(this).outerHeight());
+                $("#chat").css("display", "inline");
+                if ($("#chat").hasClass("chatclose")) {
+                    $("#accordion").trigger("click");
+                    $("#chat").removeClass("chatclose");
+                }
+            });
+            //聊天室開關
+            $("#accordion").click(function () {
+                if ($("#pic_arrow").hasClass("arrowDown")) {
+                    $("#pic_arrow").slideUp();
+                    $("#pic_arrow").attr("src", "pic/UI/arrowUp.png");
+                    $("#pic_arrow").slideDown();
+                    $("#pic_arrow").removeClass("arrowDown");
+
+                    $("#chat").addClass("chatclose");
+                }
+                else {
+                    $("#pic_arrow").slideUp();
+                    $("#pic_arrow").attr("src", "pic/UI/arrowDown.png");
+                    $("#pic_arrow").slideDown();
+                    $("#pic_arrow").addClass("arrowDown");
+                }
+            });
+            //聊天室輸入框事件
+            $("#status_message").keypress(function (event) {
+                if (event.keyCode == 13) {
+                    if (event.shiftKey) {// shift+enter
+                        var textHeight = $("#status_message").height() + 34;
+                        $("#status_message").css("height", textHeight);
+                    }
+                    else {//Enter鍵
+                        var msg = this.value;
+                        //Regexp \s X+
+                        setMessageToDB(msg);
+
+                        this.value = "";
+                        //$(this).html("");
+                        $("#status_message").css("height", 34);
+                        return false;
+                    }
+                }
+            });
+        })
+        function getDateTimeNow() {
+            var month = (new Date().getMonth() + 1);
+            if (month < 10)
+                month = "0" + month;
+            var date = new Date().getDate();
+            if (date < 10)
+                date = "0" + month;
+
+            var date = new Date().getFullYear() + "/" + month + "/" + date;
+
+            var mimute = new Date().getMinutes();
+            if (mimute < 10)
+                mimute = "0" + mimute;
+            var hour = new Date().getHours();
+            if (hour < 10)
+                hour = "0" + hour;
+            var currentTime = hour + ":" + mimute;
+            var dateTime = date + " " + currentTime;
+            return dateTime;
+        }
+
+        function setMessageToDB(msg) {
+            var uid = document.getElementById("uid").value;
+            var name = document.getElementById("username").value;
+            var time = getDateTimeNow();
+            var photoUrl = document.getElementById("current_user").src;
+
+            var messageListRef = firebase.database().ref('chat/' + groupId);
+            var newMessageRef = messageListRef.push();
+            newMessageRef.set({
+                sender_id:uid,
+                photoUrl: photoUrl,
+                name: name,
+                time: time,
+                text: msg
+            });
+        }
+        function fetchChatMsg() {
+            var chatRef = firebase.database().ref('chat/' + groupId);
+            chatRef.on('child_added', function (data) {
+                //console.log(data.val());
+                var name = data.val().name;
+                if (data.val().photoUrl != null)
+                    var photoUrl = data.val().photoUrl;
+                else
+                    var photoUrl = "pic/user/user_green1.png";
+
+                //console.log(photoUrl);
+                //處理時間
+                var arrayDate = data.val().time.split(" ")[0].split("/");
+                var date = arrayDate[0] + "年" + arrayDate[1] + "月" + arrayDate[2]+"日"
+                var time = data.val().time.split(" ")[1];
+
+
+                var msg = data.val().text.replace(/\n/g, '<br />');
+                //console.log("name: " + name + "\nphotoUrl: " + photoUrl + "\ndate: " + date + "\ntime: " + time + "\nmsg: " + msg);
+
+                writeMsg(name, photoUrl, date,time,msg);
+            });
+        }
+        function writeMsg(name, photoUrl, date, time, msg) {
+            if (msg != "") {
+                
+                //var name = document.getElementById("username").value;
+                //var photoUrl = document.getElementById("current_user").src;
+                //var dateTime = new Date().getFullYear() + "年" + (new Date().getMonth() + 1) + "月" + new Date().getDate() + "日";
+                //var currentTime = new Date().getHours() + ":" + new Date().getMinutes();
+
+                var lastMsgDate = $("#chatContent .timestamp:last").text();
+                var divDate = "";
+                if (date != lastMsgDate) {
+                    divDate = '<div class="chat-box-single-line"><abbr class="timestamp">' + date + '</abbr></div>';
+                }
+
+                var divMsg = $(divDate + '<div class="direct-chat-msg doted-border">' +
+                    '<!--人名--><div class="direct-chat-info clearfix"><span class="direct-chat-name">' + name + '</span></div>' +
+                    '<!--大頭照--><img alt="大頭照" src="' + photoUrl + '" class="direct-chat-img">' +
+                    '<!--內文--><div class="direct-chat-text">' + msg + '</div>' +
+                    '<!--時間--><div class="direct-chat-info clearfix"><span class="direct-chat-timestamp">' + time + '</span></div></div>');
+
+                $("#chatContent").append(divMsg);
+
+                $("#chatContent").animate({ scrollTop: $(this).height() + 99999 }, 1000);//卷軸拉至最底
+                $('#chatAudio')[0].play();//播放提示音
+            }
+        }
+        function writeNewPost(group_location) {
+            var goupId = $("#groupId").text();
+            var groupName = document.getElementById("editGroupName").value;
+            var date = document.getElementById("editGroupDate").value;
+            var startTime = date + " " + document.getElementById("editStartTime").value;
+            var endTime = date + " " + document.getElementById("editEndTime").value;
+            var member_min = $("#edit_number_min").val();
+            var member_max = $("#edit_number_max").val();
+            var photoUrl = document.getElementById("boardGamePhotoUrl").src;
+            var gameClassType = $("#editSelectGameTypes").val();
+            var gameName = $("#editSelectGameNames").val();
+
+            //console.log("groupName:" + groupName + "\nstartTime:" + startTime + "\nendTime:" + endTime
+            //    + "\nmember_min:" + member_min + "\nmember_max:" + member_max
+            //    + "\nphotoUrl:" + photoUrl);
+
+            if (groupName == "" || date == "" || startTime == "" || endTime == "" || gameClassType == "桌遊類型" || gameName == "桌遊名稱") {
+                alert("欄位不可為空");
+                return;
+            }
+            //console.log(group_location);
+            if (group_location != false) {// 地址有改動
+                var city = $("#selectCity :selected").text();
+                var shopname = group_location["title"];
+
+                //console.log(group_location);
+
+                var shop_address = group_location["address"];
+                var map_latitude = group_location["map_latitude"];
+                var map_longtitude = group_location["map_longitude"];
+                var shopTel = group_location["tel"];
+                var opentime = group_location["opentime"];
+                var closeTime = group_location["closetime"];
+
+                firebase.database().ref().child('/group_simple/' + goupId).update({
+                    groupName: groupName,
+                    groupStartTime: startTime,
+                    groupEndTime: endTime,
+                    groupMax: member_max,
+                    groupMin: member_min,
+                    gameClassType: gameClassType,
+                    gameName: gameName,
+                    photoUrl: photoUrl,
+                    shopName: shopname,
+                    cityName: city
+                });
+
+                firebase.database().ref().child('/groups/' + goupId).update({
+                    closetime: closeTime,
+                    map_latitude: map_latitude,
+                    map_longtitude: map_longtitude,
+                    opentime: opentime,
+                    shopAddress: shop_address,
+                    shopTel: shopTel
+                });
+            }
+            else {//地址沒動
+                firebase.database().ref().child('/group_simple/' + goupId).update({
+                    groupName: groupName,
+                    groupStartTime: startTime,
+                    groupEndTime: endTime,
+                    groupMax: member_max,
+                    groupMin: member_min,
+
+                    gameClassType: gameClassType,
+                    gameName: gameName,
+                    photoUrl: photoUrl
+                });
+            }
+            //updates['/group_simple/' + goupId] = group_simple_Data;
+            //return firebase.database().ref().update(updates);
+        }
+        function fillInTheForm() {
+            document.getElementById("editGroupName").value = $("#groupName").text();
+            document.getElementById("editLocation").value = $("#shopAddress").text();
+            document.getElementById("editGroupDate").value = $("#date").text();
+            document.getElementById("editStartTime").value = $("#StartTime").text();
+            document.getElementById("editEndTime").value = $("#EndTime").text();
+            $("#boardGamePhotoUrl").attr("src", document.getElementById("gamePic").src);
+            var min = $("#min").text();
+            var max = $("#max").text();
+            $("#edit_number_min").val(min);
+            $("#edit_number_max").val(max);
+        }
+        function generateOptionsOfCityAndShop() {
+            //fetch city的選項
+            document.getElementById("editSelectCity").options.length = 1;
+            firebase.database().ref('/shop').once('value').then(function (snapshot) {
+                objShops = snapshot.val();
+                var citys = Object.keys(objShops);
+                for (var i in citys) {
+                    $("#editSelectCity").append('<option >' + citys[i] + '</option>');
+                }
+            });
+            //城市選擇完的事件
+            var objBlocks;
+            $("#editSelectCity").click(function () {
+                $("#default_City").hide();
+            });
+            $("#editSelectCity").change(function () {
+                $("#default_area").hide();
+                document.getElementById("editSelectBlock").options.length = 1;
+                var strCity = $("#editSelectCity :selected").text();
+                objBlocks = objShops[strCity];
+                var blocks = Object.keys(objBlocks);
+                for (var i in blocks) {
+                    $("#editSelectBlock").append('<option >' + blocks[i] + '</option>');
+                }
+            });
+            //地區選擇完事件
+            $("#editSelectBlock").change(function () {
+                $("#default_shop").hide();
+                document.getElementById("editSelectShop").options.length = 1;
+                var strBlock = $("#editSelectBlock :selected").text();
+                shops = objBlocks[strBlock];
+                for (var i in shops) {
+                    $("#editSelectShop").append('<option >' + shops[i]["title"] + "  " + shops[i]["address"] + '</option>');
+                }
+            });
+
+            //店家選擇完的事件
+            $("#editSelectShop").change(function () {
+                var index_shop = $("#editSelectShop :selected").index();
+                group_location = shops["id" + index_shop];
+                document.getElementById("editLocation").value = group_location["address"];
+
+                //console.log("店家選擇完:\n" + Object.keys(group_location).length);
+                return group_location;
+                //myMap(group_location["map_latitude"], group_location["map_longitude"], group_location["title"]);
+                ////顯示地圖
+                //$("#googleMap").slideDown(1000).fadeTo(1000, 1);
+            });
+            //console.log("取GROUP地點的值\n" + Object.keys(group_location).length);
+            if (Object.keys(group_location).length == 0) {
+                group_location = false;
+            }
+            return group_location;
+        }
+        function generateOptionsOfGameAndGameclass() {
+            //清空遊戲類型選項
+            document.getElementById("editSelectGameTypes").options.length = 1;
+
+            var objGames;
+            //fetch 遊戲類型
+            firebase.database().ref('/game_Introduction/class').once('value').then(function (snapshot) {
+                objGames = snapshot.val();
+                var gameTypes = Object.keys(objGames);
+                for (var i in gameTypes) {
+                    $("#editSelectGameTypes").append('<option >' + gameTypes[i] + '</option>');
+                }
+                //遊戲類型選項給值
+                var gameClassType = $("#gameClassType").text();
+                $("#editSelectGameTypes").val(gameClassType);
+                //產生遊戲選項
+                $("#default_game").hide();
+                objGameType = objGames[gameClassType];
+                var games = Object.keys(objGameType);
+                for (var i in games) {
+                    $("#editSelectGameNames").append('<option >' + games[i] + '</option>');
+                }
+                //遊戲選項給值
+                var gameName = $("#gameName").text();
+                $("#editSelectGameNames").val(gameName);
+            });
+            var objGameType;
+            //遊戲類型選擇完的事件
+            $("#editSelectGameTypes").click(function () {
+                $("#default_gametype").hide();
+            });
+            $("#editSelectGameTypes").change(function () {
+                $("#default_game").hide();
+                document.getElementById("editSelectGameNames").options.length = 1;
+                var selectedGameType = $("#editSelectGameTypes :selected").text();
+                objGameType = objGames[selectedGameType];
+                var games = Object.keys(objGameType);
+                for (var i in games) {
+                    $("#editSelectGameNames").append('<option >' + games[i] + '</option>');
+                }
+            });
+            //遊戲選擇完的事件
+            var objBoardGame;
+            $("#editSelectGameNames").change(function () {
+                var keyOfBoardGame = $("#editSelectGameNames :selected").text();
+                objBoardGame = objGameType[keyOfBoardGame];
+                //設置桌遊資訊
+                $("#boardGamePhotoUrl").attr("src", objBoardGame["photoUrl"]);
+                $("#boardGameInstruction").text(objBoardGame["tg_introduction"]);
+                ////顯示桌遊資訊
+                ////$("#googleMap").slideUp(1000);
+                //$("#boardGame").slideDown(1000);
+                ////$("#toggleButton").show();
+            });
+        }
+        function getParameterByName(name, url) {
+            //假設一開始name=>hobby[0]
+            if (!url) url = window.location.href; //如果url==null 則url指派為目前頁面的網址
+            name = name.replace(/[\[\]]/g, '\\$&');
+            //此時name=> hobby\[0\]
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url); //搜尋url符合RegExp’s pattern的字串片段
+            //console.log(results);
+            //results[0]-> "&hobby[0]=sing" (results[0]對應符合pattern的字串)
+            //results[1]-> "=sing"          (results[1]對應pattern中第一個群組的字串)
+            //results[2]-> "sing"           (results[2]對應pattern中第二個群組的字串)
+            if (!results) return null;  //當results==null-->return null
+            if (!results[2]) return ''; //當results[2]==undefined/空字串-->return ''
+            return decodeURIComponent(results[2].replace(/\+/g, ' ')); //請求參數值當中之+字元換成空白, 然後進行百分比解碼
+        }
+        function fetchGroupInfo(groupId,callBack) {
+            var shopName = "";
+            var groupSimpleRef = firebase.database().ref('group_simple/' + groupId);
+            groupSimpleRef.on('value', function (snapshot) {
+                if (!snapshot.exists())
+                    self.location.href = "index.html";
+
+                var data = snapshot.val();
+                $("#groupName").text(data.groupName);
+                $("#title").text(data.groupName);
+                $("#groupId").text(groupId);
+                $("#gameClassType").text(data.gameClassType);
+                $("#gameName").text(data.gameName);
+                $("#min").text(data.groupMin);
+                $("#max").text(data.groupMax);
+                $("#gamePic").attr("src", data.photoUrl);
+                //處理結束時間
+                var date = data.groupStartTime.split(" ")[0];
+                var StartTime = data.groupStartTime.split(" ")[1];
+                var EndTime = data.groupEndTime.split(" ")[1];
+                $("#date").text(date);
+                $("#StartTime").text(StartTime);
+                $("#EndTime").text(EndTime);
+                //店家資料
+                shopName = data.shopName;
+                $("#shopName").text(shopName);
+                //團長資料
+                $("#userPhotoUrl").attr("src", data.userPhotoUrl);
+                $("#headName").text(data.userName);
+                $("#headId").text(groupId);
+                //members資料處理
+                members = data.members;
+                $("#numberOfMembers").text(Object.keys(members).length);
+                appendUser(data.groupMin, data.groupMax, members, data.userName,callBack);
+
+                var uid = document.getElementById("uid").value;
+                isAlreadyJoin = checkIdOfMembers(uid, Object.keys(members));
+                if (isAlreadyJoin == true || uid == groupId) {
+                    joinBtnChangeStyle();
+                    document.getElementById("btnStartChat").disabled = false;
+                }
+            });
+            //撈桌遊團groups資料
+            var groupRef = firebase.database().ref('groups/' + groupId);
+            groupRef.on('value', function (snapshot) {
+                var data = snapshot.val();
+                //店家資料
+                $("#shopAddress").text(data.shopAddress);
+                $("#openTime").text(data.opentime);
+                $("#closeTime").text(data.closetime);
+                $("#shopTel").text(data.shopTel);
+                myMap(data.map_latitude, data.map_longtitude, shopName);
+            });
+        }
+
+        function appendUser(groupMin, groupMax, members, userName,callBack) {
+            //console.log("appendUser事件");
+            var memberNames = new Array();
+            var memberPhotos = new Array();
+            var memberIds = new Array();
+            //拆解members
+            $.each(members, function (index, value) {
+                if (value.name != userName) {
+                    memberIds.push(index);
+                    memberNames.push(value.name);
+                    if (typeof value.userPhotoUrl != "undefined")
+                        memberPhotos.push(value.userPhotoUrl);
+                    else
+                        memberPhotos.push("pic/user/user_green.png");
+                }
+            })
+            var requirededSeat = "";
+            for (var i = 0; i < groupMin - 1; i++) {
+                if (i < memberNames.length) {
+                    requirededSeat += '<hr />' +
+                        '<div class=" mx-3 row justify-content-between align-items-center" id= "" >' +
+                        '<div class="col">' +
+                        '<div class="row align-items-center">' +
+                        '<div class=""><img src="' + memberPhotos[i] + '" style="height:40px;width:40px;" class="img_user rounded-circle mr-3" /></div>' +
+                        '<div class=""><a href="#" class="memberName">' + memberNames[i] + '</a><span class="memberId" hidden>' + memberIds[i]+'</span></div>' +
+                        '</div>' +
+                        '</div>' + '<div class=""><button type="button" class="btn btn-outline-secondary btnRemoveMember" id="" onmouseover="btnRemoveMember_changeStyle()" onmouseout="btnRemoveMember_resetStyle()"><img src="pic/UI/removeMember.png" id="pic_btnRemoveMember" style="height:18px;"><span> 踢除團員</span></button></div>'+
+                        '</div >';
+                }
+                else {
+                    requirededSeat += '<hr />' +
+                        '<div class=" mx-3 row justify-content-between align-items-center" id= "" >' +
+                        '<div class="col">' +
+                        '<div class="row align-items-center">' +
+                        '<div class=""><img src="' + 'pic/user/user_green_question.png' + '" style="height:40px;" class="rounded-circle mr-3" /></div>' +
+                        '<div class=""><span class="">' + '(本位缺人)' + '</span></div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div >';
+                }
+            }
+            var freeSeat = "";
+            for (var i = 0; i < groupMax - groupMin; i++) {
+                freeSeat += '<hr />' +
+                    '<div class=" mx-3 row justify-content-between align-items-center" id= "" >' +
+                    '<div class="col">' +
+                    '<div class="row align-items-center">' +
+                    '<div class=""><img src="' + 'pic/user/user_green_light.png' + '" style="height:40px;" class="rounded-circle mr-3" /></div>' +
+                    '<div class=""><span class="">' + '(本位開放)' + '</span></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div >';
+            }
+            var div_group = $(requirededSeat + freeSeat);
+            $("#members").empty();
+            $("#members").append(div_group);
+
+            if (typeof callBack === 'function')
+                callBack();
+        }
+        function checkIdOfMembers(uid, keyOfmembers) {
+            for (var i = 0; i < keyOfmembers.length; i++) {
+                if (uid == keyOfmembers[i])
+                    return true;
+            }
+            return false;
+        }
+        function memberEvent() {
+            //console.log("memberEvent事件");
+            //團員頭像點擊事件
+            $("#memberBlock .img_user").click(function () {
+                //console.log($(this).parent().next().children(".memberId").text());
+                var memberId = $(this).parent().next().children(".memberId").text();
+                self.location.href = "member.html?memberId=" + memberId;
+            });
+            //團員名字點擊事件
+            $("#memberBlock .memberName").click(function () {
+                //console.log($(this).parent().children(".memberId").text());
+                var memberId = $(this).parent().children(".memberId").text();
+                self.location.href = "member.html?memberId=" + memberId;
+            });
+            //註冊btnRemoveMember點擊事件
+            $("#members .btnRemoveMember").click(function () {
+                //刪除member
+                var memberId = $(this).parent().prev().children().children().children(".memberId").text()
+                var rootRef = firebase.database().ref();
+                rootRef.child("group_simple/" + groupId + "/members/" + memberId).remove();
+            });
+
+            var uid = document.getElementById("uid").value;
+            if (groupId == uid)
+                $("#members .btnRemoveMember").css("display", "inline");
+        }
+        function joinBtnChangeStyle() {
+            $("#lblToggleJoin").text(" 離開");
+            $("#btnToggleJoin").removeClass("btn-danger");
+            $("#btnToggleJoin").addClass("btn-success");
+            $("#imgToggleJoin").attr("src", "pic/UI/exit_white.png");
+        }
+        function joinBtnResetStyle() {
+            $("#lblToggleJoin").text(" 參加");
+            $("#btnToggleJoin").removeClass("btn-success");
+            $("#btnToggleJoin").addClass("btn-danger");
+            $("#imgToggleJoin").attr("src", "pic/UI/check.png");
+        }
+        function joinToggle() {
+            var groupId = $("#groupId").text();
+            var uid = document.getElementById("uid").value;
+            var username = document.getElementById("username").value;
+            var userPhotoUrl = document.getElementById("current_user").src;;
+            var groupName = $("#groupName").text();
+
+            if (isAlreadyJoin) {//離開並刪除資料
+                var rootRef = firebase.database().ref();
+                if (groupId == uid) {
+                    //刪除group
+                    rootRef.child("group_simple/" + groupId).remove();
+                    rootRef.child("groups/" + groupId).remove();
+                    //刪除chat
+                    rootRef.child("chat/" + groupId).remove();
+                    self.location.href = "index.html";
+                    //刪除user的團紀錄
+                    rootRef.child("users/" + uid + "/joined room/" + groupId).remove();
+                }
+                else {
+                    //刪除member
+                    rootRef.child("group_simple/" + groupId + "/members/" + uid).remove();
+                    //刪除user的團紀錄
+                    rootRef.child("users/" + uid + "/joined room/" + groupId).remove();
+                    //關閉chat
+                    $("#removeChat").trigger("click");
+                }
+
+                joinBtnResetStyle();
+                document.getElementById("btnStartChat").disabled = true;
+            }
+            else {//新增資料
+                var rootRef = firebase.database().ref();
+                //新增member
+                rootRef.child("group_simple/" + groupId + "/members/" + uid).set({
+                    name: username,
+                    userPhotoUrl: userPhotoUrl
+                });
+                //新增user的團紀錄
+                rootRef.child("users/" + uid + "/joined room/" + groupId).update({
+                    groupName:groupName
+                });
+                joinBtnChangeStyle();
+
+                document.getElementById("btnStartChat").disabled = false;
+            }
+        }
+
+        function btnShare_changeStyle() {
+            $("#pic_btnShare").attr('src', 'pic/UI/share_white.png');
+        }
+        function btnShare_resetStyle() {
+            $("#pic_btnShare").attr('src', 'pic/UI/share_info.png');
+        }
+        function btnEdit_changeStyle() {
+            $("#pic_btnEdit").attr('src', 'pic/UI/pen_white.png');
+        }
+        function btnEdit_resetStyle() {
+            $("#pic_btnEdit").attr('src', 'pic/UI/pen_secondary.png');
+        }
+        function btnRemoveMember_changeStyle() {
+            $("#pic_btnRemoveMember").attr('src', 'pic/UI/add_friend_white.png');
+        }
+        function btnRemoveMember_resetStyle() {
+            $("#pic_btnRemoveMember").attr('src', 'pic/UI/removeMember.png');
+        }
+        function signOut() {
+            firebase.auth().signOut();  //firebase登出
+            location.reload();
+        }
+        function initApp() {
+            var name, email, photoUrl, uid, emailVerified;
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    name = user.displayName;
+                    uid = user.uid;
+                    //判斷是否顯示編輯按鈕
+                    if (groupId == uid) {
+                        document.getElementById("btnEdit").disabled = false;
+                    }
+
+                    getUserPhoto(uid);
+                    document.getElementById("uid").value = uid;
+                    document.getElementById("username").value = name;
+
+                    $("#current_user").show();
+                    $("#current_user_not_signin").hide();
+
+                    $(".dropdown-menu a:even").hide();
+                    $(".dropdown-menu a:odd").show();
+
+                    //註冊檔案點擊事件
+                    $("#moveToMyFile").click(function () {
+                        self.location.href = "member.html?memberId=" + uid;
+                    });
+                } else {
+                    // No user is signed in.
+                    alert("加團請先登入");
+                    self.location.href = 'signIn.html';
+                }
+            });
+        }
+        function getUserPhoto(uid) {
+            //會員導覽列&會員資料頭像
+            var storageref = firebase.storage().ref("UserInfo/" + uid + "/profilename.jpg");
+            storageref.getDownloadURL().then(function (photoUrl) {
+                if (photoUrl == null) {
+                    $("#current_user").attr('src', 'pic/user/user_green.png');
+                }
+                else {
+                    $("#current_user").attr('src', photoUrl);
+                }
+            }).catch(function () {
+                $("#current_user").attr('src', 'pic/user/user_green.png');
+            });
+        }
+        function myMap(map_latitude, map_longitude, title) {
+            var mapProp = {
+                center: new google.maps.LatLng(map_latitude, map_longitude),
+                zoom: 16
+            };    //調顯示距離
+            var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(map_latitude, map_longitude),
+                map: map,
+                animation: google.maps.Animation.BOUNCE,
+                icon: "pic/logo/mapicon.png"
+            });
+            var infowindow = new google.maps.InfoWindow({
+                content: title         //取變數帶資料
+            });
+            infowindow.open(map, marker);
+        }
+    </script>
+</head>
+
+<body>
+    <!-- header區 -->
+    <!-- 導覽列 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top navfont" style="background-color: rgba(0,0,0,.7);z-index:1000; ">
+        <img src="pic/logo/logo_gray_min.png" />
+        &nbsp;
+        <a class="navbar-brand joinbg" href="index.html">Join Board Game</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">找桌遊團</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="establish_group.html">開團囉</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="boardgame.html">桌遊介紹</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="" id="current_user" /><span id="uid" hidden></span><span id="username" hidden></span>
+                        <span id="current_user_not_signin">登入</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" id="dropdown">
+                        <a class="dropdown-item" href="signIn.html">登入</a>
+                        <a class="dropdown-item" href="#" id="moveToMyFile">我的檔案</a>
+                        <a class="dropdown-item" href="regesister.html">註冊</a>
+                        <a class="dropdown-item" href="#" onclick="signOut()">登出</a>
+                        <a class="dropdown-item" href="reset_password.html">忘記密碼</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <!--桌遊團發起 內容區-->
+    <section class="py-4 mt-5">
+        <div class="container ">
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2" id="group_detail">
+                    <br />
+                    <div class="bg-white shadow-sm rounded" id="topBlock">
+                        <div class="title media m-3 pt-3" id="">
+                            <img src="pic/logo/logo_gray.png" id="gamePic" style="height:128px;" class="rounded mr-3" />
+                            <div class="media-body bg-white">
+                                <h3 class="text-left font-weight-bold">
+                                    <span id="groupName" data-toggle="tooltip" data-placement="bottom" title="團名"></span>
+                                    <small class="text-muted " id="groupId" data-toggle="tooltip" data-placement="bottom" title="這是桌遊團Id"></small>
+                                </h3>
+                                <p class="mb-4"><span id="gameClassType" hidden></span><span id="gameName"></span> <span id="min"></span> - <span id="max"></span>人</p>
+
+                                <div class="align-items-end">
+                                    <div class="row justify-content-between mx-1">
+                                        <div>
+                                            <button class="btn btn-danger" id="btnToggleJoin" onclick="joinToggle()"><img src="pic/UI/check.png" id="imgToggleJoin" style="height:16px" /><span id="lblToggleJoin"> 參加</span> </button>
+                                            <button class="btn btn-primary" id="btnStartChat" disabled><img src="pic/UI/chat.png" style="height:16px" /><span> 傳送訊息</span> </button>
+
+                                        </div>
+                                        <div class="row">
+                                            <!--<button class="btn btn-outline-info " id="btnShare" onmouseover="btnShare_changeStyle()" onmouseout="btnShare_resetStyle()"><img src="pic/UI/share_info.png" id="pic_btnShare" style="height:16px" /><span id="btnToggleJoin"> 推播</span> </button>-->
+                                            <div id="edit">
+                                                <button class="btn btn-outline-secondary " id="btnEdit" onmouseover="btnEdit_changeStyle()" onmouseout="btnEdit_resetStyle()" disabled><img src="pic/UI/pen_secondary.png" id="pic_btnEdit" style="height:16px" /><span id="btnToggleJoin"> 編輯</span> </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr id="line" />
+                        <ul>
+                            <li>
+                                <div class="media mb-1 py-1">
+                                    <img src="pic/UI/calendar_gray.png" class="align-self-center mr-1 ml-3 mb-1" style="height:18px;" />
+                                    <div class="media-body">
+                                        <span>活動日期: </span><span id="date"></span> &nbsp;<span id="StartTime"></span> - <span id="EndTime"></span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="subTitle media  py-1" id="address">
+                                    <img src="pic/UI/location_gray.png" class="align-self-center mr-1 ml-3" style="height:18px;" />
+                                    <div class="media-body">
+                                        <span>地點: </span><span id="shopName"></span>
+                                        <br />
+                                        <span class="gray" id="shopAddress"></span><span class="mr-3" id="showMap">顯示地圖</span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div id="googleMap" style="width:100%;height:400px;" class="mt-3 shadow"></div>
+
+                    <div class="bg-white shadow-sm rounded py-3 my-3" id="topBlock">
+                        <h4 class="text-left font-weight-bold mx-3">店家資訊</h4>
+                        <hr />
+                        <ul>
+                            <li>
+                                <div class="media mb-1 py-1">
+                                    <img src="pic/UI/clock.png" class="align-self-center mr-1 ml-3 mb-1" style="height:18px;" />
+                                    <div class="media-body">
+                                        <span>營業時間: </span>&nbsp;<span id="openTime"></span> - <span id="closeTime"></span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="media  py-1" id="">
+                                    <img src="pic/UI/tel.png" class="align-self-center mr-1 ml-3" style="height:18px;" />
+                                    <div class="media-body">
+                                        <span>電話: </span>&nbsp;<span id="shopTel"></span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-white shadow-sm rounded p-3 my-3" id="">
+                        <h4 class="text-left font-weight-bold">已參加 (<span id="numberOfMembers"></span>人) </h4>
+                        <hr />
+                        <div id="memberBlock">
+                            <div class=" mx-3 bg-white row justify-content-between align-items-center" id="">
+                                <div class="col">
+                                    <div class="row align-items-center">
+                                        <div class="">
+                                            <img src="" id="userPhotoUrl" class="img_user mr-3" />
+                                        </div>
+                                        <div class="">
+                                            <a href="#" class="memberName" id="headName"></a><span class="font-weight-normal" style="color:gray;font-size:14px;">  (團長)</span><span id="headId" class="memberId" hidden></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<div class=""><button type="button" class="btn btn-outline-secondary" id="btnRemoveMember" onmouseover="btnRemoveMember_changeStyle()" onmouseout="btnRemoveMember_resetStyle()"><img src="pic/UI/add_friend.png" id="pic_btnRemoveMember" style="height:18px;"><span> 踢除團員</span></button></div>-->
+                            </div>
+                            <div id="members">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 聊天室 -->
+        <div class="row justify-content-end mr-3 fixed-bottom">
+            <div class=" mr-3 border-bottom-0 border border-secondary rounded chatclose" style="width: 350px;" id="chat">
+                <div class="popup-head rounded-top" id="accordion" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                    <div class="popup-head-left font-weight-bold" style="float:left;">聊天室</div>
+                    <div class="popup-head-right " style="float:right;">
+
+                        <button class="chat-header-button bg-white" type="button" aria-expanded="false" title="縮小聊天室">
+                            <img src="pic/UI/arrowUp.png" id="pic_arrow" />
+                        </button>
+
+                        <button id="removeChat" class="chat-header-button bg-white" type="button" title="關閉聊天室">
+                            <img src="pic/UI/turnOff.png" />
+                        </button>
+                    </div>
+                </div>
+                <div class="panel-collapse collapse bg-white" id="collapseOne">
+                    <div class="panel-body p-3  " style="background-color:#3f9684;" id="chatContent">
+                        <!--<div class="chat-box-single-line"><abbr class="timestamp">October 8th, 2015</abbr></div>
+                        <div class="direct-chat-msg doted-border">
+                            <div class="direct-chat-info clearfix"><span class="direct-chat-name">測試員</span></div>
+                            <img alt="大頭照" src="pic/user/user_example.png" class="direct-chat-img">
+                            <div class="direct-chat-text">測試測試，測試123!</div>
+                            <div class="direct-chat-info clearfix"><span class="direct-chat-timestamp">3.36 PM</span></div>
+                        </div>-->
+
+                    </div>
+                    <div class="panel-footer">
+                        <div class="media">
+                            <button id="btnEmoji" class="align-self-center ml-1" style="height:25px;width:25px;border:none;background-color:white; background-image:url('pic/UI/smile.png')" title="選擇表情符號"></button>
+                            <div class="media-body">
+                                <textarea id="status_message" placeholder="輸入訊息........" rows="10" cols="40" name="message" style="overflow:hidden;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--dialog區-->
+        <div id="edidGroupInfo" title="編輯" class="grayDialog">
+            <div class="">
+                <label for="editGroupName">團名 </label>
+                <input type="text" name="editGroupName" id="editGroupName" class="form-control" required />
+            </div>
+            <div class="">
+                <label for="selectCity">地點 </label>
+                <input type="text" class="form-control" id="editLocation" disabled placeholder="請從選項中選取" />
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <select name="editSelectCity" id="editSelectCity" class="custom-select mb-3">
+                        <option id="default_City">城市</option>
+                    </select>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <select name="editSelectBlock" id="editSelectBlock" class="custom-select mb-3">
+                        <option id="default_area">地區</option>
+                    </select>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <select name="editSelectShop" id="editSelectShop" class="custom-select mb-3">
+                        <option id="default_shop">店名</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row ">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <p>
+                        <label for="groupDate">活動日期 </label>
+                        <input type="text" class="form-control" id="editGroupDate" />
+                    </p>
+                </div>
+                <div class="col-lg-6">
+                    <label>開始時間 </label>
+                    <div class="input-group bootstrap-timepicker timepicker">
+                        <input id="editStartTime" type="text" class="form-control input-small timepicker" aria-describedby="basic-addon1">
+                        <span class="input-group-text border-left-0 " id="basic-addon1"><img src="pic/UI/clock-2x.png" class="clock" /></span>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <label>結束時間 </label>
+                    <div class="input-group bootstrap-timepicker timepicker">
+                        <input id="editEndTime" type="text" class="form-control input-small timepicker">
+                        <span class="input-group-text border-left-0"><img src="pic/UI/clock-2x.png" class="clock" /></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row py-1">
+                <div class="col-lg-6">
+                    <label>最小人數</label>
+                    <select name="number_min" id="edit_number_min" class="custom-select">
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                        <option>11</option>
+                        <option>12</option>
+                        <option>13</option>
+                        <option>14</option>
+                        <option>15</option>
+                    </select>
+                </div>
+                <div class="col-lg-6">
+                    <label>最大人數</label>
+                    <select name="number_max" id="edit_number_max" class="custom-select mb-3">
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                        <option>11</option>
+                        <option>12</option>
+                        <option>13</option>
+                        <option>14</option>
+                        <option>15</option>
+                    </select>
+                </div>
+            </div>
+            <div id="gameArea">
+                <div>
+                    <label>想玩的桌遊 </label>
+                </div>
+                <div class="row py-1">
+                    <div class="col-lg-4">
+                        <select name="editSelectGameTypes" id="editSelectGameTypes" class="custom-select mb-3">
+                            <option id="default_gametype">桌遊類型</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-8">
+                        <select name="editSelectGameNames" id="editSelectGameNames" class="custom-select mb-3">
+                            <option id="default_game">桌遊名稱</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="media">
+                    <img src="" id="boardGamePhotoUrl" style="height:100px;" class="rounded mr-3" />
+                    <div class="media-body">
+                        <span id="boardGameInstruction" style="font-size:15px">
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!--footer start-->
+    <!-- Coding End -->
+
+    <footer class="" style="background-color:dimgray">
+        <div class="container text-white py-4 bg-attachment bg-cover ">
+            <div class="row justify-content-center">
+
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fab fa-adversal fa-4x mr-3" aria-hidden="true"></i>
+                        <div class="media-body">
+                            <!-- Links -->
+                            <h3 class="font-weight-bold text-uppercase mb-4">關於我們</h3>
+
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a class="a-footer" href="Disclaimer.html">版權及免責聲明</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="Privacy Policy.html">隱私權聲明</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">客服信箱</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fas fa-address-card fa-4x mr-3" aria-hidden="true"></i>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-bold text-uppercase mb-4">會員</h3>
+
+                            <ul class="list-unstyled ">
+                                <li>
+                                    <a class="a-footer" href="regesister.html">會員註冊</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">會員註冊條款</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">問題Ｑ＆Ａ</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fas fa-atlas fa-4x mr-3" aria-hidden="true"></i>
+                        <div class="text-white media-body">
+                            <h3 class="font-weight-bold text-uppercase mb-4">桌遊介紹</h3>
+
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=家庭聚會">家庭聚會</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=情境冒險">情境冒險</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=派對聯誼">派對聯誼</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=兒童親子">兒童親子</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="footer-copyright text-center pt-3">
+                <span style="color:lightgray;">© 2018 III101期專題</span>
+            </div>
+            <!-- Copyright -->
+
+        </div>
+    </footer>
+
+
+    <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyAhZsxma5bjKBNAVv-USQQ2ifc1SmaKTFE",
+            authDomain: "joinboardgame-91903.firebaseapp.com",
+            databaseURL: "https://joinboardgame-91903.firebaseio.com",
+            projectId: "joinboardgame-91903",
+            storageBucket: "joinboardgame-91903.appspot.com",
+            messagingSenderId: "400469741806"
+        };
+        firebase.initializeApp(config);
+    </script>
+</body>
+</html>

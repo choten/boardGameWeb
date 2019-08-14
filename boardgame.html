@@ -1,0 +1,680 @@
+﻿<!DOCTYPE html>
+<html lang="zh-hant">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="pic/logo/logo_gray_min.png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous"><!-- https://fontawesome.com/icons?d=gallery   ICON圖示-->
+
+    <title>桌遊介紹 Join Board Game </title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="js/ui-redmond/jquery-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-timepicker.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/modernizr.custom.97074.js"></script>
+    <script type="text/javascript" src="js/jquery.hoverdir.js"></script>
+
+    <style type="text/css">
+        body {
+            padding-top: 0rem;
+            height: 100%;
+            font-family: "微軟正黑體";
+            background: #fff url(pic/background/bg.png) repeat top left;
+        }
+
+        .a-footer {
+            color: white; /*  修改超連結顏色 */
+        }
+
+        .navfont {
+            font-size: 22px; /*  修改導航欄字體 */
+        }
+
+        .joinbg {
+            font-size: 30px; /*  修改導航欄字體 */
+        }
+
+        .starter-template {
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+
+        a:hover {
+            color: #333;
+        }
+
+        .bg-cover {
+            background-size: cover;
+            background-position: center center;
+        }
+
+        .bg-attachment {
+            background-attachment: fixed; /*  固定住的 */
+        }
+
+        .p-ex1 {
+            padding-top: 125px;
+        }
+
+        .text-center {
+            font-family: "微軟正黑體";
+            font-weight: bold;
+        }
+
+        #current_user {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+        }
+
+        .imgBoardGame {
+            height: 128px;
+            width: 128px;
+        }
+        
+        @media (max-width: 575.98px) {
+            .navbar {
+                display: none;
+            }
+            #left_nav {
+                display: none;
+            }
+            .foot {
+                display: none;
+            }
+        }
+        @media (min-width: 768px) {
+            
+            .imgBoardGame {
+                height: 160px;
+                width: 160px;
+            }
+
+            #content {
+                margin-top: 20px;
+            }
+
+            #left_nav {
+                margin-top: 45px;
+                padding-top: 45px;
+            }
+
+            #gameArea {
+                margin-top: 25px;
+                padding-top: 25px;
+            }
+
+        }
+
+        a {
+            text-decoration: none !important;
+        }
+
+        ul,
+        ul ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .menu {
+            width: auto;
+            height: auto;
+            -webkit-box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
+            -moz-box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
+            box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
+        }
+
+            .menu > li > a {
+                background-color: #616975;
+                background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(114, 122, 134)),to(rgb(80, 88, 100)));
+                background-image: -webkit-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+                background-image: -moz-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+                background-image: -o-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+                /*background-image: -ms-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));*/
+                background-image: linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+                filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#727a86', EndColorStr='#505864');
+                border-bottom: 1px solid #33373d;
+                -webkit-box-shadow: inset 0px 1px 0px 0px #878e98;
+                -moz-box-shadow: inset 0px 1px 0px 0px #878e98;
+                box-shadow: inset 0px 1px 0px 0px #878e98;
+                width: 100%;
+                height: 2.75em;
+                line-height: 2.75em;
+                text-indent: 2.75em;
+                display: block;
+                position: relative;
+                font-weight: 600;
+                color: #fff;
+                text-shadow: 0px 1px 0px rgba(0,0,0,.5);
+            }
+
+        #wrapper {
+            /*width:280px;*/
+            margin: 20px auto !important;
+            font-size: 0.9375em;
+        }
+
+        .menu ul li:not(#datefilter) a {
+            background: #fff;
+            border-bottom: 1px solid #efeff0;
+            width: 100%;
+            height: 2.75em;
+            line-height: 2.75em;
+            text-indent: 2.75em;
+            display: block;
+            position: relative;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 0.923em;
+            font-weight: 400;
+            color: #878d95;
+        }
+
+        .menu > li > a:hover,
+        .menu > li > a.active {
+            background-color: #35afe3;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(69, 199, 235)),to(rgb(38, 152, 219)));
+            background-image: -webkit-linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));
+            background-image: -moz-linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));
+            background-image: -o-linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));
+            /*background-image: -ms-linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));*/
+            background-image: linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));
+            filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#45c7eb', EndColorStr='#2698db');
+            border-bottom: 1px solid #103c56;
+            -webkit-box-shadow: inset 0px 1px 0px 0px #6ad2ef;
+            -moz-box-shadow: inset 0px 1px 0px 0px #6ad2ef;
+            box-shadow: inset 0px 1px 0px 0px #6ad2ef;
+        }
+
+        .menu > li > a.active {
+            border-bottom: 1px solid #1a638f;
+        }
+
+        .menu > li > ul li:not(#datefilter) a:before {
+            content: '▶';
+            font-size: 8px;
+            color: #bcbcbf;
+            position: absolute;
+            width: 1em;
+            height: 1em;
+            top: 0;
+            left: -2.7em;
+        }
+
+        .menu > li > ul li:not(#datefilter):hover a,
+        .menu > li > ul li:not(#datefilter):hover a span,
+        .menu > li > ul li:not(#datefilter):hover a:before {
+            color: #32373D;
+        }
+
+        .menu > li > a:before {
+            content: '';
+            background-image: url(pic/UI/chess.png);
+            background-repeat: no-repeat;
+            font-size: 36px;
+            height: 1em;
+            width: 1em;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            margin: -.5em 0 0 0;
+        }
+
+        .item1 > a:before {
+            background-image: url(pic/UI/magnifying.png) !important;
+        }
+
+        .item2 > a:before {
+            background-image: url(pic/UI/chess.png) !important;
+        }
+
+        .item3 > a:before {
+            background-image: url(pic/UI/people.png) !important;
+        }
+
+        .item4 > a:before {
+            background-image: url(pic/UI/clock_white.png) !important;
+            height: 1em !important;
+            width: 1em !important;
+        }
+
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            initApp();
+            
+            //menu
+            var menu_ul = $('.menu > li > ul'),
+                menu_a = $('.menu > li > a');
+            menu_ul.hide();
+            menu_a.click(function (e) {
+                e.preventDefault();
+                if (!$(this).hasClass('active')) {
+                    menu_a.removeClass('active');
+                    menu_ul.filter(':visible').slideUp('normal');
+                    $(this).addClass('active').next().stop(true, true).slideDown('normal');
+                } else {
+                    $(this).removeClass('active');
+                    $(this).next().stop(true, true).slideUp('normal');
+                }
+            });
+            ////getJSON資料處理
+            //$.getJSON("https://iii101-3.iii.wpj.tw/boardGames.json", function (data) {
+            //    console.log("測試");
+            //    console.log(data);
+            //    appendGameImg(data);
+            //})
+            //$.ajax({
+            //    url: 'https://iii101-3.iii.wpj.tw:8443/CallMeDB/111.jsp',
+            //    type: 'GET',
+            //    dataType: "JSON",
+            //    success: function (data) {
+            //        console.log("接受資料成功!");
+            //        console.log(data);
+            //        //appendGameImg(data);
+            //    },
+            //    error: function (error) {
+            //        console.log("接受資料失敗!\n");
+            //        console.log(error);
+            //    }
+            //});
+
+            //fetch 遊戲類型
+            firebase.database().ref('/game_Introduction/class').once('value').then(function (snapshot) {
+                $.each(snapshot.val(), function (typeIndex,data) {
+                    $.each(data, function (gameIndex,value) {
+                        appendGameImg(value);
+                    })
+                });
+
+                $(' #da-thumbs > li ').each(function () { $(this).hoverdir(); });
+            });
+
+            //selectGameType
+            $("#wrapper .selectGameType").click(function () {
+                var selectedGameType = $(this).text();
+                filterGroup('gameType', selectedGameType);
+                return false;
+            });
+            //selectNumberOfPeople
+            $("#wrapper .selectNumberOfPeople").click(function () {
+                var selectNumberOfPeople = $(this).text();
+                filterGroup('numberOfPeople', selectNumberOfPeople);
+                return false;
+            });
+            //selectCity
+            $("#wrapper .selectgameTime").click(function () {
+                var selectCity = $(this).text();
+                filterGroup('city', selectCity);
+                return false;
+            });
+        });
+        function appendGameImg(value) {
+                //console.log("value.tg_id: " + value.tg_id + "\ntg_name: " + value.tg_name
+                //    + "\ntg_max: " + value.tg_max + "\ntg_min: " + value.tg_min + "\ntg_class: " + value.tg_class + "\ntg_photoUrl: " + value.photoUrl);
+
+            var liBoardGame = $('<li class="boardGame" ><a href= "boardgame_Introduction.html" >' +
+                    '<img class="imgBoardGame" src="' + value.photoUrl+'">' +
+                    '<div><span><span class="tg_name">' + value.tg_name + '</span><br /><span class="tg_class">' + value.tg_class + '</span><br />' +
+                    '<span class="tg_min">' + value.tg_min + '</span> - <span class="tg_max">' + value.tg_max+'</span> 人</span></div></a>' +
+                                    '</li >');
+
+
+                $("#da-thumbs").append(liBoardGame);
+             
+            
+        }
+        function filterGroup(type, value) {
+            switch (type) {
+                case 'gameType': //遊戲類型篩選
+                    $("#da-thumbs .boardGame").each(function () {
+                        var gameType = $(".tg_class", this).text();
+                        if (gameType == value) {
+                            $(this).slideDown(600);
+                        }
+                        else {
+                            $(this).slideUp(600);
+                        }
+                    });
+                    break;
+                case 'numberOfPeople': //人數篩選
+                    if (value == '9人以上') {
+                        $("#da-thumbs .boardGame").each(function () {
+                            var max = parseInt($(".tg_max", this).text());
+
+                            if (max >= 9) {
+                                $(this).slideDown(600);
+                            }
+                            else {
+                                $(this).slideUp(600);
+                            }
+                        });
+                    }
+                    else {
+                        $("#da-thumbs .boardGame").each(function () {
+                            var min = parseInt($(".tg_min", this).text());
+                            var max = parseInt($(".tg_max", this).text());
+                            var numberOfPeople = parseInt(value);
+
+                            if (value - min >= 0 && max - value >= 0) {
+                                $(this).slideDown(600);
+                            }
+                            else {
+                                $(this).slideUp(600);
+                            }
+                        });
+                    }
+                    break;
+                case 'gameTime':
+                    $("#da-thumbs .boardGame").each(function () {
+                        var city = $(".city", this).text();
+                        if (city == value) {
+                            $(this).slideDown(600);
+                        }
+                        else {
+                            $(this).slideUp(600);
+                        }
+                    });
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        function searchGroupName() {
+            var input_gameName = document.getElementById("txtGameName").value;
+            if (input_gameName != "") {
+                $("#da-thumbs .boardGame").each(function () {
+                    var gameName = $(".tg_name", this).text();
+
+                    if (gameName.match(input_gameName) != null) {
+                        $(this).slideDown(600);
+                    }
+                    else {
+                        $(this).slideUp(600);
+                    }
+                });
+            }
+            else {
+                $("#da-thumbs .boardGame").each(function () {
+                    $(this).fadeIn();
+                });
+            }
+        }
+        function signOut() {
+            firebase.auth().signOut();  //firebase登出
+            location.reload();
+        }
+        function initApp() {
+            var name, email, photoUrl, uid, emailVerified;
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    // User is signed in.
+                    name = user.displayName;
+                    email = user.email;
+                    uid = user.uid;
+                    getUserPhoto(uid);
+                    emailVerified = user.emailVerified;
+
+                    $("#current_user").show();
+                    $("#current_user_not_signin").hide();
+
+                    $("#dropdown-menu a:even").hide();
+                    $("#dropdown-menu a:odd").show();
+
+                    //註冊檔案點擊事件
+                    $("#moveToMyFile").click(function () {
+                        self.location.href = "member.html?memberId=" + uid;
+                    });
+                } else {
+                    // No user is signed in.
+
+                    $("#current_user").hide();
+                    $("#current_user_not_signin").show();
+                    $("#dropdown-menu a:odd").hide();
+                    $("#dropdown-menu a:even").show();
+                }
+            });
+        }
+        function getUserPhoto(uid) {
+            //會員導覽列&會員資料頭像
+            var storageref = firebase.storage().ref("UserInfo/" + uid + "/profilename.jpg");
+            storageref.getDownloadURL().then(function (photoUrl) {
+                if (photoUrl == null) {
+                    $("#current_user").attr('src', 'pic/user/user_green.png');
+                }
+                else {
+                    $("#current_user").attr('src', photoUrl);
+                }
+            }).catch(function () {
+                $("#current_user").attr('src', 'pic/user/user_green.png');
+            });
+        }
+        function test() {
+
+        }
+    </script>
+</head>
+
+
+<body>
+    <!-- header 區 -->
+    <!-- 導覽列 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top navfont" style="background-color: rgba(0,0,0,.7); ">
+        <img src="pic/logo/logo_gray_min.png" />
+        &nbsp;
+        <a class="navbar-brand joinbg" href="index.html">Join Board Game</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">找桌遊團</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="establish_group.html">開團囉</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="boardgame.html">桌遊介紹</a>
+                </li>
+
+            </ul>
+
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="" id="current_user" />
+                        <span id="current_user_not_signin">登入</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" id="dropdown-menu">
+                        <a class="dropdown-item" href="signIn.html">登入</a>
+                        <a class="dropdown-item" href="#" id="moveToMyFile">我的檔案</a>
+                        <a class="dropdown-item" href="regesister.html">註冊</a>
+                        <a class="dropdown-item" href="#" onclick="signOut()">登出</a>
+                        <a class="dropdown-item" href="reset_password.html">忘記密碼</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="container-fluid">
+        <div id="introduction"></div>
+        <div class="row justify-content-md-center" id="content">
+
+            <div class=" px-3 col-md-2 " id="left_nav">
+                <div id="wrapper" style="background-color: #f7f7f7;">
+                    <ul class="menu">
+                        <li class="item1">
+                            <a href="#" id="titleOfSearch">搜索 </a>
+                            <ul>
+                                <li class="subitem1">
+                                    <div class="input-group my-2">
+                                        <input type="text" id="txtGameName" class="form-control" placeholder="請輸入桌遊名稱" aria-label="Recipient's username" aria-describedby="button-addon2" onkeypress="searchGroupName()">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="searchGroupName()">搜尋</button>
+                                        </div>
+                                        <span id="descriptionOfSearch">若輸入欄位為空，則顯示全部資料</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="item2">
+                            <a href="#">依遊戲類型篩選 </a>
+                            <ul>
+                                <li class="subitem1"><a href="#" class="selectGameType" id="GameType_children">兒童親子</a></li>
+                                <li class="subitem2"><a href="#" class="selectGameType" id="GameType_family">家庭聚會</a></li>
+                                <li class="subitem3"><a href="#" class="selectGameType" id="GameType_party">情境冒險</a></li>
+                                <li class="subitem4"><a href="#" class="selectGameType" id="GameType_party">派對聯誼</a></li>
+                            </ul>
+                        </li>
+                        <li class="item3">
+                            <a href="#">依人數篩選</a>
+                            <ul>
+                                <li class="subitem1"><a href="#" class="selectNumberOfPeople">2</a></li>
+                                <li class="subitem2"><a href="#" class="selectNumberOfPeople">3</a></li>
+                                <li class="subitem3"><a href="#" class="selectNumberOfPeople">4</a></li>
+                                <li class="subitem3"><a href="#" class="selectNumberOfPeople">5</a></li>
+                                <li class="subitem3"><a href="#" class="selectNumberOfPeople">6</a></li>
+                                <li class="subitem3"><a href="#" class="selectNumberOfPeople">7</a></li>
+                                <li class="subitem3"><a href="#" class="selectNumberOfPeople">8</a></li>
+                                <li class="subitem3"><a href="#" class="selectNumberOfPeople">9人以上</a></li>
+                            </ul>
+                        </li>
+                        <li class="item4">
+                            <a href="#">依遊戲時間篩選</a>
+                            <ul>
+                                <li class="subitem1"><a href="#" class="selectgameTime">30分以內</a></li>
+                                <li class="subitem2"><a href="#" class="selectgameTime">30 - 60分</a></li>
+                                <li class="subitem3"><a href="#" class="selectgameTime">60分 - 120分</a></li>
+                                <li class="subitem3"><a href="#" class="selectgameTime">120分鐘以上</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--桌遊圖片區-->
+            <div class=" col-md-6 mx-2" id="gameArea">
+                <h2 class="text-center mb-3">桌遊介紹</h2>
+                <!--<a onclick="test()">測試</a>-->
+                <ul id="da-thumbs" class="da-thumbs">
+                    <!--<li class="boardGame">
+                        <a href="boardgame-Introduction.html" onclick="loadIntroduction()">
+                            <img class="imgBoardGame" src="pic/boardGame/betrayal_at_house_on_the_hill.jpg" alt="縮圖圖片">
+                            <div>
+                                <span><span class="tg_name">山中小屋</span><br /><span class="tg_class">情境冒險</span><br /><span class="tg_min">3</span> - <span class="tg_max">6</span> 人</span>
+                            </div>
+                        </a>
+                    </li>-->
+
+                </ul>
+
+            </div>
+        </div>
+    </section>
+
+    <!--footer start-->
+    <!-- Coding End -->
+    <footer class="" style="background-color:dimgray">
+        <div class="container text-white py-4 bg-attachment bg-cover ">
+            <div class="row justify-content-center">
+
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fab fa-adversal fa-4x mr-3" aria-hidden="true"></i>
+                        <div class="media-body">
+                            <!-- Links -->
+                            <h3 class="font-weight-bold text-uppercase mb-4">關於我們</h3>
+
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a class="a-footer" href="Disclaimer.html">版權及免責聲明</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="Privacy Policy.html">隱私權聲明</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">客服信箱</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fas fa-address-card fa-4x mr-3" aria-hidden="true"></i>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-bold text-uppercase mb-4">會員</h3>
+
+                            <ul class="list-unstyled ">
+                                <li>
+                                    <a class="a-footer" href="regesister.html">會員註冊</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">會員註冊條款</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">問題Ｑ＆Ａ</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fas fa-atlas fa-4x mr-3" aria-hidden="true"></i>
+                        <div class="text-white media-body">
+                            <h3 class="font-weight-bold text-uppercase mb-4">桌遊介紹</h3>
+
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=家庭聚會">家庭聚會</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=情境冒險">情境冒險</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=派對聯誼">派對聯誼</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=兒童親子">兒童親子</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="footer-copyright text-center pt-3">
+                <span style="color:lightgray;">© 2018 III101期專題</span>
+            </div>
+            <!-- Copyright -->
+
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyAhZsxma5bjKBNAVv-USQQ2ifc1SmaKTFE",
+            authDomain: "joinboardgame-91903.firebaseapp.com",
+            databaseURL: "https://joinboardgame-91903.firebaseio.com",
+            projectId: "joinboardgame-91903",
+            storageBucket: "joinboardgame-91903.appspot.com",
+            messagingSenderId: "400469741806"
+        };
+        firebase.initializeApp(config);
+    </script>
+</body>
+</html>

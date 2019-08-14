@@ -1,0 +1,390 @@
+﻿<!DOCTYPE html>
+<html lang="zh-hant">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="pic/logo/logo_gray_min.png">
+    <!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous"><!-- https://fontawesome.com/icons?d=gallery   ICON圖示-->
+
+    <title>桌遊介紹 Join Board Game </title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="js/ui-redmond/jquery-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-timepicker.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/theme-cs-portfolio.css" />
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.anythingslider.min.js"></script>
+    <!--<script src="js/modernizr.custom.97074.js"></script>-->
+    <!--<script type="text/javascript" src="js/jquery.hoverdir.js"></script>-->
+
+    <style type="text/css">
+        body {
+            padding-top: 0rem;
+            height: 100%;
+            font-family: "微軟正黑體";
+            background: #fff url(pic/background/bg.png) repeat top left;
+        }
+
+        .a-footer {
+            color: white; /*  修改超連結顏色 */
+        }
+
+        .navfont {
+            font-size: 22px; /*  修改導航欄字體 */
+        }
+
+        .joinbg {
+            font-size: 30px; /*  修改導航欄字體 */
+        }
+
+        .starter-template {
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+
+        a:hover {
+            color: #333;
+        }
+
+        .bg-cover {
+            background-size: cover;
+            background-position: center center;
+        }
+
+        .bg-attachment {
+            background-attachment: fixed; /*  固定住的 */
+        }
+
+        .p-ex1 {
+            padding-top: 125px;
+        }
+
+        .text-center {
+            font-family: "微軟正黑體";
+            font-weight: bold;
+        }
+
+        #current_user {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+        }
+        #slider, #slider .boardGameImg {
+            width: 200px;
+            height: 112px;
+        }
+        @media (max-width: 575.98px) {
+            .navbar {
+                display: none;
+            }
+
+            #left_nav {
+                display: none;
+            }
+
+            .foot {
+                display: none;
+            }
+            
+        }
+        @media (min-width: 768px) {
+
+            #content {
+                margin-top: 20px;
+            }
+
+            #left_nav {
+                margin-top: 45px;
+                padding-top: 45px;
+            }
+
+            #gameArea {
+                margin-top: 25px;
+                padding-top: 25px;
+            }
+
+            #slider, #slider .boardGameImg {
+                width: 600px;
+                height: 335px;
+            }
+        }
+
+        a {
+            text-decoration: none !important;
+        }
+
+        ul,
+        ul ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        #description  li{
+            margin-top:40px;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            initApp();
+
+            $("#btnBack").click(function () {
+                self.location.href = 'index.html';
+            });
+        });
+        function signOut() {
+            firebase.auth().signOut();  //firebase登出
+            location.reload();
+        }
+        function initApp() {
+            var name, email, photoUrl, uid, emailVerified;
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    // User is signed in.
+                    name = user.displayName;
+                    email = user.email;
+                    uid = user.uid;
+                    getUserPhoto(uid);
+                    emailVerified = user.emailVerified;
+
+                    $("#current_user").show();
+                    $("#current_user_not_signin").hide();
+
+                    $("#dropdown-menu a:even").hide();
+                    $("#dropdown-menu a:odd").show();
+
+                    //註冊檔案點擊事件
+                    $("#moveToMyFile").click(function () {
+                        self.location.href = "member.html?memberId=" + uid;
+                    });
+                } else {
+                    // No user is signed in.
+
+                    $("#current_user").hide();
+                    $("#current_user_not_signin").show();
+                    $("#dropdown-menu a:odd").hide();
+                    $("#dropdown-menu a:even").show();
+                }
+            });
+        }
+        function getUserPhoto(uid) {
+            //會員導覽列&會員資料頭像
+            var storageref = firebase.storage().ref("UserInfo/" + uid + "/profilename.jpg");
+            storageref.getDownloadURL().then(function (photoUrl) {
+                if (photoUrl == null) {
+                    $("#current_user").attr('src', 'pic/user/user_green.png');
+                }
+                else {
+                    $("#current_user").attr('src', photoUrl);
+                }
+            }).catch(function () {
+                $("#current_user").attr('src', 'pic/user/user_green.png');
+            });
+        }
+    </script>
+</head>
+
+
+<body>
+    <!-- header 區 -->
+    <!-- 導覽列 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top navfont" style="background-color: rgba(0,0,0,.7) ">
+        <img src="pic/logo/logo_gray_min.png" />
+        &nbsp;
+        <a class="navbar-brand joinbg" href="index.html">Join Board Game</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">找桌遊團</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="establish_group.html">開團囉</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="boardgame.html">桌遊介紹</a>
+                </li>
+
+            </ul>
+
+            <ul class="navbar-nav ml-auto">
+
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0 navfont" type="submit">搜尋</button>
+                </form>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="" id="current_user" />
+                        <span id="current_user_not_signin">登入</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" id="dropdown-menu">
+                        <a class="dropdown-item" href="signIn.html">登入</a>
+                        <a class="dropdown-item" href="#" id="moveToMyFile">我的檔案</a>
+                        <a class="dropdown-item" href="regesister.html">註冊</a>
+                        <a class="dropdown-item" href="#" onclick="signOut()">登出</a>
+                        <a class="dropdown-item" href="reset_password.html">忘記密碼</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="container">
+        <div class="row justify-content-md-center" id="content">
+            <!--桌遊圖片區-->
+            <div class=" col-md-8  mx-2 bg-white pb-5 px-5 shadow mb-5" id="gameArea">
+                <div class="media mb-4 mt-3 row justify-content-center">
+                    <div class="media row align-items-center">
+                        <h2 class="text-center ">版權及免責聲明</h2>
+                        <div class="media-body">
+                        </div>
+                    </div>
+                    <!--<img src="pic/UI/Dice.png" class="align-self-center" style="height:30px;"/>-->
+                </div>
+                             
+                <div class="row justify-content-md-center">
+                    <div id="description">
+                        <p>以下為 JoinBoardGame (以下稱本網站) 對不同類型的內容的版權聲明：</p>
+                        <ul>
+                            <li >1. 網友上載的檔案、相片、文字等的版權並不屬於本網站，本站也不會為會員上載的任何侵權或違法作品而負上任何責任。本站會員的行為亦不等於本網站的行為。唯本站有權使用網友上載的檔案、相片、文字等作宣傳、推廣。</li>
+
+                            <li>2. 本網站對於任何包含於、經由、或聯結、下載或從任何與本網站有關服務 (以下簡稱「服務」) 所獲得之資訊、內容或廣告 (以下簡稱「資料」)，不聲明或保證其內容之正確性或可靠性；並且, 對於您透過「服務」上之廣告、資訊或要約而展示、購買或取得之任何產品、資訊或資料(「產品」)，本網站亦不負品質保證之責任。您於此接受並承認信賴任何「資料」所生之風險應自行承擔。本網站有權但無此義務，改善或更正在「服務」或「資料」任何部分之錯誤或疏失。</li>
+
+                            <li>3. 本網站之服務與資料是基於「現況」及「現有」提供，而且 本網站明確地表示拒絕對於「服務」、「資料」或「產品」給予任何明示或暗示之保證, 包括但不限於，得為商業使用或適合於特定目的之保證。</li>
+
+                            <li>4. 本網站對於因「服務」、「資料」或「產品」所生之任何直接、間接、附帶的或因此而導致之衍生性損失概不負責。</li>
+
+                            <li>5. 本網站鼓勵您於瀏覽網際網路時自行判斷以使用本網站「服務」。本網站或許會導引您至有些人認為是具攻擊性或不適當的文字。</li>
+
+                            <li>6. 本網站並不負責檢視本網站中所提供或所列網站之內容，因此, 本網站對於該內容所涉及之正確性、著作權歸屬, 或是其合法性或正當性如何並不負任何責任。</li>
+
+                            <li>7. 本網站所提供的所有服務，對於因技術錯誤或資料刪除後的損失, 並不會負上任可責任。</li>
+
+                            <li>8. 本網站在適當情況下，得自行決定終止侵害或違反他人權利之使用者的帳號或禁止指定的網際網絡地址進入本網站。如果您認為本站的內容侵犯了版權，請提供足夠的資料寄到 join.boardgame.iii@gmail.com ，本站必會盡快處理。</li>
+
+                            <li class="text-center">Copyright © 2018﹣2019 by JoinBoardGame  All Rights Reserved.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-5">
+                    <button class="btn btn-info btn-block" id="btnBack"><img src="pic/UI/share_white.png" id="pic_btnShare" style="height:16px" class="mr-1"/>返回首頁</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--footer start-->
+    <!-- Coding End -->
+    <footer class="foot" style="background-color:dimgray">
+        <div class="container text-white py-4 bg-attachment bg-cover ">
+            <!--             <h2 class="text-center">關於我們</h2>
+                    <p class="text-center">高雄市資X會中正四路1111號</p> -->
+            <div class="row">
+
+                <div class="col-md-4 media">
+                    <i class="fab fa-adversal fa-4x mr-3" aria-hidden="true"></i>
+                    <div class="media-body">
+                        <!-- Links -->
+                        <h3 class="font-weight-bold text-uppercase mb-4">關於我們</h3>
+
+                        <ul class="list-unstyled">
+                            <li>
+                                <a class="a-footer" href="#!">著作權聲明</a>
+                            </li>
+                            <li>
+                                <a class="a-footer" href="#!">隱私權聲明</a>
+                            </li>
+                            <li>
+                                <a class="a-footer" href="#!">客服信箱</a>
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+
+                </div>
+                <div class="col-md-4 media">
+                    <i class="fas fa-address-card fa-4x mr-3" aria-hidden="true"></i>
+
+                    <div class="media-body">
+                        <h3 class="font-weight-bold text-uppercase mb-4">會員</h3>
+
+                        <ul class="list-unstyled ">
+                            <li>
+                                <a class="a-footer" href="#!">會員註冊</a>
+                            </li>
+                            <li>
+                                <a class="a-footer" href="#!">會員註冊條款</a>
+                            </li>
+                            <li>
+                                <a class="a-footer" href="#!">註冊教學</a>
+                            </li>
+                            <li>
+                                <a class="a-footer" href="#!">問題Ｑ＆Ａ</a>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                </div>
+
+                <div class="col-md-4 media">
+                    <i class="fas fa-atlas fa-4x mr-3" aria-hidden="true"></i>
+                    <div class="text-white media-body">
+                        <h3 class="font-weight-bold text-uppercase mb-4">桌遊介紹</h3>
+
+                        <ul class="list-unstyled">
+                            <li>
+                                <a class="a-footer" href="#!">家庭聚會</a>
+                            </li>
+                            <li>
+                                <a class="a-footer" href="#!">情境冒險</a>
+                            </li>
+                            <li>
+                                <a class="a-footer" href="#!">策略經營</a>
+                            </li>
+                            <li>
+                                <a class="a-footer" href="#!">派對聯誼</a>
+                            </li>
+                            <li>
+                                <a class="a-footer" href="#!">兒童親子</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Copyright -->
+            <div class="footer-copyright text-center pt-3">
+                <a class="a-footer" href="#" style="color:lightgray;"> © 2018 III101期專題</a>
+            </div>
+            <!-- Copyright -->
+
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyAhZsxma5bjKBNAVv-USQQ2ifc1SmaKTFE",
+            authDomain: "joinboardgame-91903.firebaseapp.com",
+            databaseURL: "https://joinboardgame-91903.firebaseio.com",
+            projectId: "joinboardgame-91903",
+            storageBucket: "joinboardgame-91903.appspot.com",
+            messagingSenderId: "400469741806"
+        };
+        firebase.initializeApp(config);
+    </script>
+</body>
+</html>

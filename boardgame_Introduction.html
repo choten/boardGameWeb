@@ -1,0 +1,415 @@
+﻿<!DOCTYPE html>
+<html lang="zh-hant">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="pic/logo/logo_gray_min.png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous"><!-- https://fontawesome.com/icons?d=gallery   ICON圖示-->
+
+    <title>桌遊介紹 Join Board Game </title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="js/ui-redmond/jquery-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-timepicker.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/theme-cs-portfolio.css" />
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.anythingslider.min.js"></script>
+    <!--<script src="js/modernizr.custom.97074.js"></script>-->
+    <!--<script type="text/javascript" src="js/jquery.hoverdir.js"></script>-->
+
+    <style type="text/css">
+        body {
+            padding-top: 0rem;
+            height: 100%;
+            font-family: "微軟正黑體";
+            background: #fff url(pic/background/bg.png) repeat top left;
+        }
+
+        .a-footer {
+            color: white; /*  修改超連結顏色 */
+        }
+
+        .navfont {
+            font-size: 22px; /*  修改導航欄字體 */
+        }
+
+        .joinbg {
+            font-size: 30px; /*  修改導航欄字體 */
+        }
+
+        .starter-template {
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+
+        a:hover {
+            color: #333;
+        }
+
+        .bg-cover {
+            background-size: cover;
+            background-position: center center;
+        }
+
+        .bg-attachment {
+            background-attachment: fixed; /*  固定住的 */
+        }
+
+        .p-ex1 {
+            padding-top: 125px;
+        }
+
+        .text-center {
+            font-family: "微軟正黑體";
+            font-weight: bold;
+        }
+
+        #current_user {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+        }
+        #slider, #slider .boardGameImg {
+            width: 200px;
+            height: 112px;
+        }
+        @media (max-width: 575.98px) {
+            .navbar {
+                display: none;
+            }
+
+            #left_nav {
+                display: none;
+            }
+
+            .foot {
+                display: none;
+            }
+            
+        }
+        @media (min-width: 768px) {
+
+            #content {
+                margin-top: 20px;
+            }
+
+            #left_nav {
+                margin-top: 45px;
+                padding-top: 45px;
+            }
+
+            #gameArea {
+                margin-top: 25px;
+                padding-top: 25px;
+            }
+
+            #slider, #slider .boardGameImg {
+                width: 600px;
+                height: 335px;
+            }
+        }
+
+        a {
+            text-decoration: none !important;
+        }
+
+        ul,
+        ul ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            initApp();
+
+            //輪播器
+            $("#slider").anythingSlider({ theme: 'cs-portfolio', autoPlay: true, buildArrows: false, buildNavigation: false, buildStartStop: false });
+
+            $("#btnBack").click(function () { self.location.href = "boardgame.html" });
+        });
+        function signOut() {
+            firebase.auth().signOut();  //firebase登出
+            location.reload();
+        }
+        function initApp() {
+            var name, email, photoUrl, uid, emailVerified;
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    // User is signed in.
+                    name = user.displayName;
+                    email = user.email;
+                    uid = user.uid;
+                    getUserPhoto(uid);
+                    emailVerified = user.emailVerified;
+
+                    $("#current_user").show();
+                    $("#current_user_not_signin").hide();
+
+                    $("#dropdown-menu a:even").hide();
+                    $("#dropdown-menu a:odd").show();
+
+                    //註冊檔案點擊事件
+                    $("#moveToMyFile").click(function () {
+                        self.location.href = "member.html?memberId=" + uid;
+                    });
+                } else {
+                    // No user is signed in.
+
+                    $("#current_user").hide();
+                    $("#current_user_not_signin").show();
+                    $("#dropdown-menu a:odd").hide();
+                    $("#dropdown-menu a:even").show();
+                }
+            });
+        }
+        function getUserPhoto(uid) {
+            //會員導覽列&會員資料頭像
+            var storageref = firebase.storage().ref("UserInfo/" + uid + "/profilename.jpg");
+            storageref.getDownloadURL().then(function (photoUrl) {
+                if (photoUrl == null) {
+                    $("#current_user").attr('src', 'pic/user/user_green.png');
+                }
+                else {
+                    $("#current_user").attr('src', photoUrl);
+                }
+            }).catch(function () {
+                $("#current_user").attr('src', 'pic/user/user_green.png');
+            });
+        }
+    </script>
+</head>
+
+
+<body>
+    <!-- header 區 -->
+    <!-- 導覽列 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top navfont" style="background-color: rgba(0,0,0,.7) ">
+        <img src="pic/logo/logo_gray_min.png" />
+        &nbsp;
+        <a class="navbar-brand joinbg" href="index.html">Join Board Game</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">找桌遊團</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="establish_group.html">開團囉</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="boardgame.html">桌遊介紹</a>
+                </li>
+
+            </ul>
+
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="" id="current_user" />
+                        <span id="current_user_not_signin">登入</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" id="dropdown-menu">
+                        <a class="dropdown-item" href="signIn.html">登入</a>
+                        <a class="dropdown-item" href="#" id="moveToMyFile">我的檔案</a>
+                        <a class="dropdown-item" href="regesister.html">註冊</a>
+                        <a class="dropdown-item" href="#" onclick="signOut()">登出</a>
+                        <a class="dropdown-item" href="reset_password.html">忘記密碼</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="container">
+        <div class="row justify-content-md-center" id="content">
+            <!--桌遊圖片區-->
+            <div class=" col-md-8  mx-2 bg-white pb-5 px-5 shadow mb-5" id="gameArea">
+                <div class="media mb-4 mt-3 row justify-content-center">
+                    <div class="media row align-items-center">
+                        <h2 class="text-center ">山中小屋的背叛者</h2>
+                        <div class="media-body">
+                        </div>
+                    </div>
+                    <!--<img src="pic/UI/Dice.png" class="align-self-center" style="height:30px;"/>-->
+                </div>
+
+                <div class="row justify-content-center">
+                    <div id="slider">
+                        <div>
+                            <a href="#">
+                                <img src="pic/boardGame/Betrayal_gallery_1_0.jpg" class="boardGameImg rounded" alt="桌遊圖片">
+                            </a>
+                        </div>
+                        <div>
+                            <a href="#">
+                                <img src="pic/boardGame/Betrayal_gallery_2_0.jpg" class="boardGameImg rounded" alt="桌遊圖片">
+                            </a>
+                        </div>
+                        <div>
+                            <a href="#">
+                                <img src="pic/boardGame/Betrayal_gallery_3_0.jpg" class="boardGameImg rounded" alt="桌遊圖片">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-md-center">
+                    <div id="description">
+                        <span class="font-weight-bold" style="font-size:18px;">基本屬性</span>
+                        <img src="pic/logo/logo_chess.png" style="height:28px;" />
+                        <hr />
+                        <p><img src="pic/UI/chess_black.png" style="height:18px;" /> 遊戲類型: &nbsp;情境冒險</p>
+                        <p><img src="pic/UI/people_black.png" style="height:18px;" /> 遊戲人數: &nbsp;3 - 6 人</p>
+                        <p><img src="pic/UI/clock_black.png" style="height:18px;" /> 遊戲時間: &nbsp;60分鐘</p>
+                        <p class="mb-5"><img src="pic/UI/man_black.png" style="height:18px;" /> 建議年齡: &nbsp;12歲以上</p>
+
+                        <span class="font-weight-bold" style="font-size:18px;">桌遊介紹</span>
+                        <img src="pic/logo/mapicon2.png" style="height:25px;" />
+
+                        <hr />
+                        <p style="text-indent:25px;">
+                            "山中小屋的背叛者"，也有人譯為"山居奇聞"或"詭宅驚魂"
+                            這是一款蠻熱門的大型桌遊，常常看到有人揪團玩這款遊戲，最近更是推出了新的擴充: 寡婦行。
+                        </p>
+                        <p style="text-indent:25px;">
+                            這遊戲是以美式驚慄電影為藍本。
+                            玩家扮演著一些經典角色，智慧長者、堅強女性、莽撞少年、
+                            爽朗少女、陽光男孩、天真女童，
+                            三男三女於風雨交加的晚上來到一幢古老大屋躲避。
+                            大門關閉後即無法開啟，各人只好在大宅中探索，逐步揭開事情的真相。
+                        </p>
+                        <p style="text-indent:25px;">
+                            遊戲分成兩個階段，第一階段是探索
+                            玩家們從大廳出發，按照自己的速度擲骰決定行動點數探索房間
+                            也就是抽一張房間連接到目前自己所在的房間
+                            並按照房間上面的指示獲得物品、發現預兆或發生事件
+                            發現的預兆夠多的時候，便會決定要進行哪個劇本
+                            因為每次發現預兆後都會擲六顆骰來檢定，
+                            若點數小於目前出現的預兆牌數目則開始進入作祟階段
+                            這遊戲總共有50個劇本
+                            決定劇本後便進入第二階段，作祟(Haunt)
+                            此時玩家中其中一人會成為叛徒，而其他人為英雄
+                            叛徒和英雄都有各自的勝利條件
+                            並不是把對方殺掉就一定會贏，玩家得判斷情況討論出最適當的方法
+                            進入作祟階段後，最好叛徒自己離開房間閱讀"叛徒之書"
+                            而英雄們翻開"求生手冊"來討論對策
+                            因為這裡面都有一些關鍵資訊，若是被對方得知後有可能會對自己不利。
+                        </p>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <!--<a href="boardgame.html">[返回上一頁]</a>-->
+                    <button class="btn btn-info btn-block" id="btnBack"><img src="pic/UI/share_white.png" id="pic_btnShare" style="height:16px" class="mr-1"/>返回上一頁</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--footer start-->
+    <!-- Coding End -->
+    <footer class="" style="background-color:dimgray">
+        <div class="container text-white py-4 bg-attachment bg-cover ">
+            <div class="row justify-content-center">
+
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fab fa-adversal fa-4x mr-3" aria-hidden="true"></i>
+                        <div class="media-body">
+                            <!-- Links -->
+                            <h3 class="font-weight-bold text-uppercase mb-4">關於我們</h3>
+
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a class="a-footer" href="Disclaimer.html">版權及免責聲明</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="Privacy Policy.html">隱私權聲明</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">客服信箱</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fas fa-address-card fa-4x mr-3" aria-hidden="true"></i>
+
+                        <div class="media-body">
+                            <h3 class="font-weight-bold text-uppercase mb-4">會員</h3>
+
+                            <ul class="list-unstyled ">
+                                <li>
+                                    <a class="a-footer" href="regesister.html">會員註冊</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">會員註冊條款</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="#!">問題Ｑ＆Ａ</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col row justify-content-center">
+                    <div class="media">
+                        <i class="fas fa-atlas fa-4x mr-3" aria-hidden="true"></i>
+                        <div class="text-white media-body">
+                            <h3 class="font-weight-bold text-uppercase mb-4">桌遊介紹</h3>
+
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=家庭聚會">家庭聚會</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=情境冒險">情境冒險</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=派對聯誼">派對聯誼</a>
+                                </li>
+                                <li>
+                                    <a class="a-footer" href="boardgame.html?gameType=兒童親子">兒童親子</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="footer-copyright text-center pt-3">
+                <span style="color:lightgray;">© 2018 III101期專題</span>
+            </div>
+            <!-- Copyright -->
+
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyAhZsxma5bjKBNAVv-USQQ2ifc1SmaKTFE",
+            authDomain: "joinboardgame-91903.firebaseapp.com",
+            databaseURL: "https://joinboardgame-91903.firebaseio.com",
+            projectId: "joinboardgame-91903",
+            storageBucket: "joinboardgame-91903.appspot.com",
+            messagingSenderId: "400469741806"
+        };
+        firebase.initializeApp(config);
+    </script>
+</body>
+</html>
